@@ -7,6 +7,8 @@ from rest_framework_simplejwt.views import (
 )
 
 from api import views
+from api.signup import Signup
+from api.signin import Signin
 
 urlpatterns = [
     path('setores/', views.ListaSetor.as_view()),
@@ -21,6 +23,8 @@ urlpatterns = [
     path('avaliacao-atendimento/<int:pk>/', views.DetalhaAtendimento.as_view()),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('signin', Signin.as_view()),
+    path('signup', Signup.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

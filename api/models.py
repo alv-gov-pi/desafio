@@ -1,3 +1,4 @@
+from pickle import TRUE
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, Permission
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -31,7 +32,7 @@ class Usuario(AbstractBaseUser):
     cadastrado_em = models.DateTimeField(auto_now_add=True)
     nome = models.CharField(max_length=100, blank=False)
     email = models.EmailField(max_length=100, blank=False, unique=True)
-    senha =  models.CharField(max_length=30, blank=False)
+    password =  models.CharField(max_length=150, blank=True)
     genero = models.CharField(max_length=1, blank=False, choices=Genero.choices)
     esta_ativo = models.BooleanField(default=False)
     setor = models.ForeignKey(
@@ -41,7 +42,7 @@ class Usuario(AbstractBaseUser):
         on_delete=models.SET_NULL
     )
     USERNAME_FIELD = 'email'
-    PASSWORD_FIELD = 'senha'
+    PASSWORD_FIELD = 'password'
     class Meta:
         ordering = ['cadastrado_em']
     def __str__(self):

@@ -1,0 +1,17 @@
+from api.auth import Autenticacao
+from api.serializers import UsuarioSerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.exceptions import APIException
+
+class Signup(APIView):
+    def post(self, request):
+        nome = request.data.get('nome')
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        usuario = Autenticacao.signup(self, nome=nome, email=email, password=password)
+
+        serializer = UsuarioSerializer(usuario)
+
+        return Response({"usuario": serializer.data})

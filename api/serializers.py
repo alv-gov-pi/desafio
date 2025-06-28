@@ -48,7 +48,7 @@ class ServicoSerializer(serializers.ModelSerializer):
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = ['id','nome', 'email', 'senha', 'genero', 'esta_ativo', 'setor']
+        fields = ['id','nome', 'email', 'password', 'genero', 'esta_ativo', 'setor']
     
     def create(self, validated_data):
         """
@@ -63,7 +63,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
         instance.id = validated_data.get('id', instance.id)
         instance.nome = validated_data.get('nome', instance.nome)
         instance.email = validated_data.get('email', instance.email)
-        instance.senha = validated_data.get('senha', instance.senha)
+        instance.password = validated_data.get('password', instance.password)
         instance.esta_ativo = validated_data.get('esta_ativo', instance.esta_ativo)
         instance.setor = validated_data.get('setor', instance.setor)
         instance.save()
