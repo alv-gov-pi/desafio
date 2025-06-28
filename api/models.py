@@ -1,6 +1,5 @@
 from django.db import models
-
-from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, Permission
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Setor(models.Model):
@@ -28,10 +27,10 @@ class Genero(models.TextChoices):
     MASCULINO = 'M', 'Masculino'
     FEMININO = 'F', 'Feminino'
 
-class Usuario(models.Model):
+class Usuario(AbstractBaseUser):
     cadastrado_em = models.DateTimeField(auto_now_add=True)
     nome = models.CharField(max_length=100, blank=False)
-    email = models.EmailField(max_length=100, blank=False)
+    email = models.EmailField(max_length=100, blank=False, unique=True)
     senha =  models.CharField(max_length=30, blank=False)
     genero = models.CharField(max_length=1, blank=False, choices=Genero.choices)
     esta_ativo = models.BooleanField(default=False)
@@ -41,6 +40,8 @@ class Usuario(models.Model):
         blank=True,
         on_delete=models.SET_NULL
     )
+    USERNAME_FIELD = 'email'
+    PASSWORD_FIELD = 'senha'
     class Meta:
         ordering = ['cadastrado_em']
     def __str__(self):
@@ -81,5 +82,3 @@ class AvaliacaoAtendimento(models.Model):
         on_delete=models.SET_NULL,
         related_name='setor_solicitante'
     )
-
-
