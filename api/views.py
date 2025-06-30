@@ -1,7 +1,7 @@
 from rest_framework import generics
 
-from api.serializers import SetorSerializer, ServicoSerializer, UsuarioSerializer, AtendimentoSerializer, AvaliacaoAtendimentoSerializer
-from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento
+from api.serializers import SetorSerializer, ServicoSerializer, UsuarioSerializer, AtendimentoSerializer, AvaliacaoAtendimentoSerializer, PainelAvaliacaoServicoSerializer
+from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento, PainelAvaliacaoServico
 
 
 class ListaSetor(generics.ListCreateAPIView):
@@ -43,3 +43,11 @@ class ListaAvaliacaoAtendimento(generics.ListCreateAPIView):
 class DetalhaAvaliacaoAtendimento(generics.RetrieveUpdateDestroyAPIView):
     queryset = AvaliacaoAtendimento.objects.all()
     serializer_class = AvaliacaoAtendimentoSerializer
+
+class ListaPainelAvaliacaoServico(generics.ListCreateAPIView):
+    queryset = PainelAvaliacaoServico.objects.all()
+    serializer_class = PainelAvaliacaoServicoSerializer
+
+class DetalhaPainelAvaliacaoServico(generics.RetrieveUpdateDestroyAPIView):
+    queryset = PainelAvaliacaoServico.objects.all()
+    serializer_class = PainelAvaliacaoServicoSerializer

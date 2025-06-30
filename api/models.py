@@ -91,6 +91,7 @@ class AvaliacaoAtendimento(models.Model):
         on_delete=models.SET_NULL,
         related_name='setor_solicitante'
     )
+    
 class PainelAvaliacaoServico(models.Model):
     nome = models.CharField(max_length=100, blank=False)
     servico_avaliado = models.ForeignKey (

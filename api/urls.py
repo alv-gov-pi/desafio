@@ -21,6 +21,8 @@ urlpatterns = [
     path('atendimento/<int:pk>/', views.DetalhaAtendimento.as_view()),
     path('avaliacao-atendimentos/', views.ListaAvaliacaoAtendimento.as_view()),
     path('avaliacao-atendimento/<int:pk>/', views.DetalhaAtendimento.as_view()),
+     path('painel-avaliacao-servicos/', views.ListaPainelAvaliacaoServico.as_view()),
+    path('painel-avaliacao-servico/<int:pk>/', views.DetalhaPainelAvaliacaoServico.as_view()),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('signin', Signin.as_view()),
