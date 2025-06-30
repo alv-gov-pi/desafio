@@ -59,13 +59,15 @@ class Atendimento(models.Model):
         Usuario,  
         null=True,
         blank=True,
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
+        related_name='solicitante'
     )
     responsavel = models.ForeignKey(
         Usuario,  
         null=True,
         blank=True,
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
+        related_name='responsavel'
     )
     cadastrado_em = models.DateTimeField(auto_now_add=True)
     atendido = models.BooleanField(default=False)
@@ -89,3 +91,13 @@ class AvaliacaoAtendimento(models.Model):
         on_delete=models.SET_NULL,
         related_name='setor_solicitante'
     )
+class PainelAvaliacaoServico(models.Model):
+    nome = models.CharField(max_length=100, blank=False)
+    servico_avaliado = models.ForeignKey (
+        Servico,  
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='servico_avaliado'
+    )
+    esta_visivel = models.BooleanField(default=False)

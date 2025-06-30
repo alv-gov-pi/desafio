@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento
+from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento, PainelAvaliacaoServico
 class SetorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Setor
@@ -105,7 +105,7 @@ class AtendimentoSerializer(serializers.ModelSerializer):
     
     def update(self, instance, validated_data):
         """
-        Atualiza.
+        Atualiza e retorna um Atendimento a partir de dados válidos.
         """
         instance.id = validated_data.get('id', instance.id)
         instance.servico = validated_data.get('servico', instance.servico)
@@ -122,13 +122,13 @@ class AvaliacaoAtendimentoSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         """
-        Create and return a new `Snippet` instance, given the validated data.
+        Cria e retorna um novo AvaliacaoAtendimento a partir de dados válidos.
         """
         return AvaliacaoAtendimento.objects.create(**validated_data)
     
     def update(self, instance, validated_data):
         """
-        Atualiza.
+        Atualiza e retorna um AvaliacaoAtendimento a partir de dados válidos.
         """
         instance.id = validated_data.get('id', instance.id)
         instance.nota = validated_data.get('nota', instance.nota)
@@ -136,5 +136,26 @@ class AvaliacaoAtendimentoSerializer(serializers.ModelSerializer):
         instance.cadastrado_em = validated_data.get('cadastrado_em', instance.cadastrado_em)
         instance.servico_solicitado = validated_data.get('servico_solicitado', instance.servico_solicitado)
         instance.setor_solicitante = validated_data.get('setor_solicitante', instance.setor_solicitante)
+        instance.save()
+        return instance
+
+class PainelAvaliacaoServicoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PainelAvaliacaoServico
+        fields = ['nome','nota', 'genero']
+    
+    def create(self, validated_data):
+        """
+        Cria e retorna um novo PainelAvaliacaoServico a partir de dados válidos.
+        """
+        return PainelAvaliacaoServico.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        """
+        Atualiza e retorna um PainelAvaliacaoServico a partir de dados válidos.
+        """
+        instance.id = validated_data.get('id', instance.id)
+        instance.servico_avaliado = validated_data.get('servico_avaliado', instance.servico_avaliado)
+        instance.esta_visivel = validated_data.genero('esta_visivel', instance.esta_visivel)
         instance.save()
         return instance
