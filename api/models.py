@@ -61,6 +61,12 @@ class Atendimento(models.Model):
         blank=True,
         on_delete=models.SET_NULL
     )
+    responsavel = models.ForeignKey(
+        Usuario,  
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
     cadastrado_em = models.DateTimeField(auto_now_add=True)
     atendido = models.BooleanField(default=False)
     

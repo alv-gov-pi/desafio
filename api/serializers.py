@@ -8,13 +8,13 @@ class SetorSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         """
-        Create and return a new `Snippet` instance, given the validated data.
+        Cria e retorna um novo Setor a partir de dados válidos.
         """
         return Setor.objects.create(**validated_data)
     
     def update(self, instance, validated_data):
         """
-        Atualiza.
+        Atualiza e retorna um Setor a partir de dados válidos.
         """
         instance.id = validated_data.get('id', instance.id)
         instance.nome = validated_data.get('nome', instance.nome)
@@ -31,13 +31,13 @@ class ServicoSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         """
-        Create and return a new `Snippet` instance, given the validated data.
+        Cria e retorna um novo Servico a partir de dados válidos.
         """
         return Servico.objects.create(**validated_data)
     
     def update(self, instance, validated_data):
         """
-        Atualiza.
+        Atualiza e retorna um Servico a partir de dados válidos.
         """
         instance.id = validated_data.get('id', instance.id)
         instance.nome = validated_data.get('nome', instance.nome)
@@ -52,13 +52,13 @@ class UsuarioSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         """
-        Create and return a new `Snippet` instance, given the validated data.
+        Cria e retorna um novo Usuario a partir de dados válidos.
         """
         return Usuario.objects.create(**validated_data)
     
     def update(self, instance, validated_data):
         """
-        Atualiza.
+        Atualiza e retorna um Usuario a partir de dados válidos.
         """
         instance.id = validated_data.get('id', instance.id)
         instance.nome = validated_data.get('nome', instance.nome)
@@ -71,18 +71,18 @@ class UsuarioSerializer(serializers.ModelSerializer):
     
 class AtendimentoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Usuario
+        model = Atendimento
         fields = ['id','servico', 'solicitante', 'cadastrado_em', 'atendido']
     
     def create(self, validated_data):
         """
-        Create and return a new `Snippet` instance, given the validated data.
+        Cria e retorna um novo Usuario a partir de dados válidos.
         """
         return Usuario.objects.create(**validated_data)
     
     def update(self, instance, validated_data):
         """
-        Atualiza.
+        Atualiza e retorna um Atendimento a partir de dados válidos.
         """
         instance.id = validated_data.get('id', instance.id)
         instance.servico = validated_data.get('servico', instance.servico)
@@ -99,7 +99,7 @@ class AtendimentoSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         """
-        Create and return a new `Snippet` instance, given the validated data.
+        Cria e retorna um novo Atendimento a partir de dados válidos.
         """
         return Atendimento.objects.create(**validated_data)
     
