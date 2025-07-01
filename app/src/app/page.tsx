@@ -1,8 +1,9 @@
 import Image from "next/image";
-import FormLogin from "./login/FormLogin";
+import PaginaLogin from "./login/PaginaLogin";
+
 
 export default function Home() {
   return (
-    <FormLogin/>
+    <PaginaLogin/>
   );
 }

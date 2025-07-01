@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.34.2",
+    "@mantine/core": "^8.1.2",
     "bootstrap": "^5.3.7",
     "next": "15.3.4",
     "next-auth": "^4.24.11",
