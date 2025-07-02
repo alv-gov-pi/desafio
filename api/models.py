@@ -42,7 +42,7 @@ class Usuario(AbstractBaseUser):
         on_delete=models.SET_NULL
     )
     USERNAME_FIELD = 'email'
-    PASSWORD_FIELD = 'password'
+
     class Meta:
         ordering = ['cadastrado_em']
     def __str__(self):

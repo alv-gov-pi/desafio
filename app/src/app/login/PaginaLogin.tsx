@@ -1,14 +1,11 @@
-import Image from 'next/image'
-import { Grid } from '@mantine/core';
-import { Container } from '@mantine/core';
-import { SimpleGrid } from '@mantine/core';
-
+import FormLogin from './FormLogin';
+import BackgroundLadoEsquerdo from './BackgroundLadoEsquerdo';
 function PaginaLogin() {
     return(
-            <Grid>
-   
-      
-    </Grid>  
+        <main className='grid grid-cols-2 gap-4'>
+            <BackgroundLadoEsquerdo/>
+            <FormLogin/>
+        </main>
     );
 }
 
