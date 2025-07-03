@@ -18,7 +18,8 @@ class Autenticacao:
         
         return usuario
     
-    def signup(self, nome, email, password):
+    def signup(self, nome, email, password, genero):
+        
         if not nome or nome == '':
             raise APIException('O nome não deve ser vazio!')
         
@@ -27,14 +28,14 @@ class Autenticacao:
         
         if not password or password == '':
             raise APIException('A password não deve ser vazio!')
-
-        email_existe = Usuario.objects.filter(email=email).exists()
-
+        print(f"Nome: {nome} email:{email} senha:{password} genero: {genero}")
+        email_existe = False#Usuario.objects.filter(email=email).exists()
+        
         if email_existe:
             raise APIException('Email informado já está em uso!')
-
+        
         password_hased = make_password(password)
-
-        novo_usuario = Usuario.objects.create(nome=nome, password=password_hased, email=email)
+        
+        novo_usuario = Usuario.objects.create(nome=nome, password=password_hased, email=email, genero=genero)
 
         return novo_usuario

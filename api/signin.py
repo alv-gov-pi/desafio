@@ -17,7 +17,7 @@ class Signin(APIView):
         serializer = UsuarioSerializer(usuario)
 
         return Response({
-            "user": serializer.data,
+            "usuario": serializer.data,
             "refresh": str(token),
             "access": str(token.access_token)
         })

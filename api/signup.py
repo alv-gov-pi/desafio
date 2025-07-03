@@ -9,9 +9,8 @@ class Signup(APIView):
         nome = request.data.get('nome')
         email = request.data.get('email')
         password = request.data.get('password')
-
-        usuario = Autenticacao.signup(self, nome=nome, email=email, password=password)
-
+        genero = request.data.get('genero')
+        usuario = Autenticacao.signup(self, nome=nome, email=email, password=password, genero=genero)
         serializer = UsuarioSerializer(usuario)
 
         return Response({"usuario": serializer.data})

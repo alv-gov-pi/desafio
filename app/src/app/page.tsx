@@ -1,4 +1,4 @@
-import PaginaLogin from "./login/PaginaLogin";
+import PaginaLogin from "./login/page";
 
 export default function Home() {
   return (

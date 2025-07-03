@@ -1,6 +1,18 @@
 function FormCadastroUsuario() {
+    async function signup(formData: FormData) {
+            'use server'
+            try {
+                const response = await fetch(`http://localhost:8000/signup`, {
+                    method: "POST",
+                    body: formData
+                })
+    
+            } catch (error) {
+                console.log(error)
+            }
+        }
     return (
-    <form className='grid content-center gap-2 w-150'>
+    <form action={signup} className='grid content-center gap-2 w-150'>
         <div className="grid">
           <label htmlFor="nome"/>Nome Completo
           <input type="text" id='nome' className="border border-sky-600 rounded-sm" name="nome"/>
@@ -18,7 +30,7 @@ function FormCadastroUsuario() {
         </div>
         <div className="grid">
               <label htmlFor="password"/>Senha
-              <input type="text" id='password' className="border border-sky-600 rounded-sm" name="password"/>
+              <input type="password" id='password' className="border border-sky-600 rounded-sm" name="password"/>
         </div>
         <div className="grid">
           <label htmlFor="setor"/>Setor
