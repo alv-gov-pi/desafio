@@ -1,8 +1,9 @@
+import SelectGenero from "@/components/select/genero";
 import SelectSetor from "@/components/select/setor";
 import { Usuario } from "@/models/Auth";
 
 function FormEditarUsuario({usuario}: {usuario: Usuario}) {
-    async function signup(formData: FormData) {
+    async function atualizar(formData: FormData) {
             'use server'
             try {
                 const response = await fetch(`http://localhost:8000/signup`, {
@@ -14,8 +15,9 @@ function FormEditarUsuario({usuario}: {usuario: Usuario}) {
                 console.log(error)
             }
         }
+
     return (
-    <form action={signup} className='grid content-center gap-2 w-150'>
+    <form action={atualizar} className='grid content-center gap-2 w-150'>
         <div className="grid">
           <label htmlFor="nome"/>Nome Completo
           <input type="text" id='nome' className="border border-sky-600 rounded-sm" name="nome" defaultValue={usuario.nome}/>
@@ -26,18 +28,20 @@ function FormEditarUsuario({usuario}: {usuario: Usuario}) {
         </div>
         <div className="grid">
           <label htmlFor="genero"/>Genero
-          <select name="genero" id="genero" className="border border-sky-600 rounded-sm">
-            <option value="F">Feminino</option>
-            <option value="M">Masculino</option>
-          </select>
-        </div>
-        <div className="grid">
-              <label htmlFor="password"/>Senha
-              <input type="password" id='password' className="border border-sky-600 rounded-sm" name="password"/>
+          <SelectGenero sigla={usuario.genero}/>
         </div>
         <div className="grid">
           <label htmlFor="setor"/>Setor
-          <SelectSetor/>
+          
+          <SelectSetor id_setor_atual={String(usuario.setor)}/>
+        </div>
+        <div className="grid">
+              <label htmlFor="password"/>Nova senha
+              <input type="password" id='nova_password' className="border border-sky-600 rounded-sm" name="nova_password"/>
+        </div>
+        <div className="grid">
+              <label htmlFor="password"/>Confirme a Nova senha
+              <input type="password" id='confirma_password' className="border border-sky-600 rounded-sm" name="confirma_password"/>
         </div>
         <div className="grid grid-cols-2 content-between">
             <div><button className="bg-green-600 p-2 rounded-sm w-24 text-white" type="submit">Salvar</button></div>
