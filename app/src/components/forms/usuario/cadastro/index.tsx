@@ -1,3 +1,5 @@
+import SelectSetor from "@/components/select/setor";
+
 function FormCadastroUsuario() {
     async function signup(formData: FormData) {
             'use server'
@@ -34,10 +36,7 @@ function FormCadastroUsuario() {
         </div>
         <div className="grid">
           <label htmlFor="setor"/>Setor
-          <select name="setor" id="setor" className="border border-sky-600 rounded-sm">
-            <option value="DITI">DITI</option>
-
-          </select>
+          <SelectSetor />
         </div>
         <div className="grid grid-cols-2 content-between">
             <div><button className="bg-green-600 p-2 rounded-sm w-24 text-white" type="submit">Salvar</button></div>
