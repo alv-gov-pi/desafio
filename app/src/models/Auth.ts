@@ -1,7 +1,7 @@
 export type Setor = {
     id: Number,
     nome: string,
-    sigle: string
+    sigla: string
 }
 
 export type Servico = {
