@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ApiSignIn } from "@/models/Auth";
+import Link from "next/link";
 function FormLogin() {
     async function login(formData: FormData) {
         'use server'
@@ -11,7 +11,6 @@ function FormLogin() {
                 body: formData
             })
             const data: ApiSignIn = await response.json()
-            console.log(`nome: ${data.usuario.nome} access:${data.access} refresh:${data.refresh} `)
         } catch (error) {
             console.log(error)
         }
@@ -28,7 +27,7 @@ function FormLogin() {
                 </div>
                 <div className="grid grid-cols-2 content-between">
                     <div><button className="bg-sky-600 p-2 rounded-sm w-24 text-white" type="submit">Logar</button></div>
-                    <div className="mt-5 ml-59"><a href="http://" className="text-sky-600">Cadastro</a></div>
+                    <div className="mt-5 ml-59"><Link className="text-sky-600" href={'/usuario/cadastro'}>Cadastro</Link></div>
                 </div>
         </form> 
     )
