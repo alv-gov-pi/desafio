@@ -1,24 +1,28 @@
 export type Setor = {
+    id: Number,
     nome: string,
     sigle: string
 }
 
 export type Servico = {
+    id: Number,
     nome: string,
     setor_ofetante: Setor
 }
 
 export type Usuario = {
+    id: Number,
     nome: string,
     email: string,
     password: string,
     esta_ativo: boolean,
     genero: string,
     setor: Setor
-    cadastrado_em: Date
+    cadastrado_em: Date,   
 }
 
 export type Atendimento = {
+    id: Number,
     servico: Servico,
     solicitante: Usuario,
     responsavel: Usuario,
@@ -27,6 +31,7 @@ export type Atendimento = {
 }
 
 export type AvaliacaoAtendimento = {
+    id: Number,
     nota: number,
     genero_solicitante: string
     servico_solicitado: Servico,
@@ -35,12 +40,14 @@ export type AvaliacaoAtendimento = {
 }
 
 export type PainelAvaliacaoServico = {
+    id: Number,
     nome: string,
     servico_avaliado: Servico,
     esta_visivel: true
 }
 
 export type ApiSignIn = {
+    id: Number,
     usuario: Usuario,
     refresh: string,
     access: string
