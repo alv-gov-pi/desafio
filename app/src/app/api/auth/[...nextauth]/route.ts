@@ -18,8 +18,8 @@ const authOptions: NextAuthOptions = {
 					body: formData
 				})
         
-        const user = await response.json()
-         
+        const userJson = await response.json()
+        const user = { id: '1', name: userJson.usuario.nome, email: userJson.usuario.email,genero: userJson.usuario.genero} 
 				if (user && response.ok) {
           return user
 				}

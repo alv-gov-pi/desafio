@@ -4,10 +4,10 @@ import ButtonLogout from "@/components/buttons/logout"
 
 export default async function UserHome () {
     const session = await getServerSession(authOptions)
-    console.log(`session: ${JSON.stringify(session)}`)
+    console.error(`print da session: ${JSON.stringify(session)}`)
     return (
         <main>
-            <h1>Bem vindo Nome do usuario</h1>
+            <h1>Bem vindo {session?.user?.name} </h1>
             <ButtonLogout />
         </main>
     )
