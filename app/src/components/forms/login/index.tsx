@@ -4,34 +4,38 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { SyntheticEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+
 function FormLogin() {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const router = useRouter()
+
     async function login(event: SyntheticEvent) {
         event.preventDefault()
-        const result = await signIn('Credentials', {
+        
+        const result = await signIn('credentials', {
             email,
             password,
             redirect: false
         })
-
+   
         if (result?.error) {
             console.log(result)
             return
         }
 
-        router.replace('/admin')
+        router.replace('/usuario')
         
     }
     return(
-            <form onSubmit={login} className='grid content-center gap-2 w-150'>
+            <form onSubmit={login} className='grid content-center gap-2 w-150' method="POST">
                 <div className="grid">
                     <label htmlFor="email"/>Email
                     <input type="text" id='email'  
                     className="border border-sky-600 rounded-sm" 
                     name="email"
-                    onChange={(e) => setEmail(e.target.value)}/>
+                    onChange={(e) => setEmail(e.target.value)}
+                    />
                 </div>
                 <div className="grid">
                     <label htmlFor="password"/>Senha
@@ -40,6 +44,7 @@ function FormLogin() {
                     className="border border-sky-600 rounded-sm" 
                     name="password"
                     onChange={(e) => setPassword(e.target.value)}
+                    
                     />
                 </div>
                 <div className="grid grid-cols-2 content-between">

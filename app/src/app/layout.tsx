@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
-import NextAuthSessionProvider  from "@/providers/session-provider";
+import NextAuthSessionProvider from "@/providers/session-provider";
 
 export const metadata: Metadata = {
   title: "Atendimentos seplan",
@@ -20,11 +20,11 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body>
-        
-          <NextAuthSessionProvider>
-            <MantineProvider>{children}</MantineProvider>
-          </NextAuthSessionProvider>
-      
+
+        <NextAuthSessionProvider>
+          <MantineProvider>{children}</MantineProvider>
+        </NextAuthSessionProvider>
+
       </body>
     </html>
   );

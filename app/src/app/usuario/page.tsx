@@ -1,17 +1,14 @@
-'use client'
-import TabelaUsuario from "@/components/tabelas/usuario";
-import { useState, useEffect } from "react";
-export default function listarUsuario() {
-    const [posts, setUsuarios] = useState([])
-    useEffect(() => {
-        fetch('localhost:8000/usuarios')
-        .then(res => res.json())
-        .then(data => setUsuarios(data.usuarios))
-    }, [])
-    return(
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import ButtonLogout from "@/components/buttons/logout"
+
+export default async function UserHome () {
+    const session = await getServerSession(authOptions)
+    console.log(`session: ${JSON.stringify(session)}`)
+    return (
         <main>
-            <h1>Todos os Usuários</h1>
-            <TabelaUsuario/>
+            <h1>Bem vindo Nome do usuario</h1>
+            <ButtonLogout />
         </main>
     )
 }
