@@ -1,5 +1,5 @@
 import FormEditarUsuario from "@/components/forms/usuario/editar";
-import { Usuario } from "@/models/Auth";
+import { Usuario } from "@/types/usuario";
 import React from "react";
 
 export default async function pageEditar({ params }: { params: Promise<{ id: string }> }) {

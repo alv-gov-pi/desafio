@@ -1,6 +1,6 @@
 import SelectGenero from "@/components/select/genero";
 import SelectSetor from "@/components/select/setor";
-import { Usuario } from "@/models/Auth";
+import { Usuario } from "@/types/usuario";
 
 function FormEditarUsuario({usuario}: {usuario: Usuario}) {
     async function atualizar(formData: FormData) {
