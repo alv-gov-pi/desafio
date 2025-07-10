@@ -3,6 +3,7 @@ import { NavLink } from '@mantine/core';
 import { IconHome2, IconTicket, IconLogout2} from '@tabler/icons-react';
 import {signOut} from "next-auth/react"
 import { useRouter } from 'next/navigation'
+
 export default function HeaderApp({usuario_id}: {usuario_id: number}) {
     const router = useRouter()
     
@@ -15,7 +16,7 @@ export default function HeaderApp({usuario_id}: {usuario_id: number}) {
             router.replace('/')
         }
     return (
-        <header className="w-screen bg-blue-600 text-white h-12">
+        <header className="w-screen bg-blue-600 text-white h-1/12">
             <nav>
                 <ul className='flex justify-end justify-items-center gap-4 mr-4'>
                     <i><NavLink
