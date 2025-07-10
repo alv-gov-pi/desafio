@@ -1,4 +1,5 @@
 import FormEditarUsuario from "@/components/forms/usuario/editar";
+import TemplateApp from "@/components/template/autenticado/template";
 import { Usuario } from "@/types/usuario";
 import React from "react";
 
@@ -11,8 +12,8 @@ export default async function pageEditar({ params }: { params: Promise<{ id: str
     const usuario: Usuario = await response.json();
 
     return (
-        <main>
+        <TemplateApp>
             <FormEditarUsuario usuario={usuario} />
-        </main>
+        </TemplateApp>
     )
 }
