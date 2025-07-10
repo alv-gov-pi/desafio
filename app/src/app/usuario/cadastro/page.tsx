@@ -1,9 +1,10 @@
 import FormCadastroUsuario from "@/components/forms/usuario/cadastro";
-
+import TemplateNaoAtenticado from "@/components/template/nao-autenticado/template";
 export default function PaginaCadastro() {
     return (
-    <main className="grid content-center">
-        <FormCadastroUsuario/>
-    </main>
+        <TemplateNaoAtenticado>
+            <FormCadastroUsuario />
+        </TemplateNaoAtenticado>
+
     );
 }

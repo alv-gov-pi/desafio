@@ -1,8 +1,9 @@
-import FormLogin from '../../components/forms/login';
-import BackgroundLadoEsquerdo from '../../components/backgrounds';
+import FormLogin from '@/components/forms/login';
+import BackgroundLadoEsquerdo from '@/components/backgrounds';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from '../api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import TemplateNaoAtenticado from '@/components/template/nao-autenticado/template';
 
 async function PaginaLogin() {
     const session = await getServerSession(authOptions)
@@ -10,10 +11,10 @@ async function PaginaLogin() {
             redirect('/usuario')
         }
     return(
-        <main className='grid grid-cols-2 gap-4'>
+        <TemplateNaoAtenticado>
             <BackgroundLadoEsquerdo/>
             <FormLogin/>
-        </main>
+        </TemplateNaoAtenticado>
     );
 }
 
