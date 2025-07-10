@@ -1,4 +1,4 @@
-import FormCadastroUsuario from "../../../components/forms/usuario/cadastro";
+import FormCadastroUsuario from "@/components/forms/usuario/cadastro";
 
 export default function PaginaCadastro() {
     return (
