@@ -3,33 +3,36 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import ButtonLogout from "@/components/buttons/logout"
 import HeaderApp from "@/components/template/autenticado/header/header";
 import CardSetor from "@/components/card/setor/card-setor";
+import FooterApp from "@/components/template/autenticado/footer";
+import TemplateApp from "@/components/template/autenticado/template";
 import { redirect } from "next/navigation";
-
+import { Setor } from "@/types/setor";
+interface ApiSetores {
+    count: number,
+    next: number,
+    previous: number,
+    results: Setor[]
+}
 export default async function UserHome() {
     const session = await getServerSession(authOptions)
-    const response = await fetch(`http://localhost:8000/usuario/setores.json`, {
+    const response = await fetch(`http://localhost:8000/setores.json`, {
         method: "GET"
     })
-    const setores = [{ "id": 1, "nome": "Secretaria de Planejamento do Piaui", "sigla": "SEPLAN", "setor_superior": null }, 
-        { "id": 2, "nome": "Diretoria de Tecnologia da Informação e Inovação", "sigla": "DITI", "setor_superior": 1 }, 
-        { "id": 3, "nome": "Núcleo de Controle Interno", "sigla": "NCI", "setor_superior": 1 }, 
-        { "id": 4, "nome": "Assessoria Técnica", "sigla": "ASTEC", "setor_superior": 1 }, 
-        { "id": 5, "nome": "Assessoria Técnica de Comunicação", "sigla": "ASCOM", "setor_superior": 1 }, 
-        { "id": 6, "nome": "Diretoria Administrativa e Financeira", "sigla": "DAFIN", "setor_superior": 1 }, 
-        { "id": 7, "nome": "Superintendência de Estudos Econômicos e Sociais", "sigla": "CEPRO", "setor_superior": 1 }]
+    const resultado: ApiSetores = await response.json()
+    const setores: Setor[] = resultado.results
+
     if (!session) {
         redirect('/')
     }
 
     return (
-        <main>
-            <HeaderApp usuario_id={7} />
-            <h1>Bem vindo, {session?.user?.name} ! as seguintes secretarias ofertam serviços: </h1>
-            <div className="flex flex-row gap-5 flex-wrap justify-center mt-2">
-                {setores.map(s => <CardSetor key={s.id} setor={s} />)}
+        <TemplateApp>
+            <div>
+                <h1>Bem vindo, {session?.user?.name} ! as seguintes secretarias ofertam serviços: </h1>
+                <div className="flex flex-row gap-5 flex-wrap justify-center mt-2 h-10/12">
+                    {setores.map(s => <CardSetor key={`${s.id}`} setor={s} />)}
+                </div>
             </div>
-
-            <ButtonLogout />
-        </main>
+        </TemplateApp>
     )
 }
