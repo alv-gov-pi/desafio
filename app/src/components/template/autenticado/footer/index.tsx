@@ -1,5 +1,6 @@
 'use client'
 import { IconPhone, IconMail, IconMapPin } from '@tabler/icons-react';
+import Image from 'next/image'
 export default function FooterApp() {
     return (
         < footer className="w-screen bg-blue-600 text-white h-1/12 mt-2 flex justify-between">
@@ -8,7 +9,7 @@ export default function FooterApp() {
                 <div className='flex row-auto gap-1'><span>{<IconMail size={16} stroke={1.5} />}</span>gabinete@seplan.pi.gov.br</div>
                 <div className='flex row-auto gap-1'><span>{<IconMapPin size={16} stroke={1.5} />}</span>Av. Miguel Rosa, 3190 • Centro/Sul • CEP: 64.001-495 • Teresina-PI</div>
             </div>
-            <div className='mr-5'><img src="logo-rodape.png" alt="logo rodape" /></div>
+            <div className='mr-5'><Image src="/logo-rodape.png" alt='logo rodapé' width={193} height={114}/></div>
         </footer>
     );
 }
