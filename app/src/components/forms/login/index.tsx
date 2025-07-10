@@ -28,7 +28,7 @@ function FormLogin() {
         
     }
     return(
-            <form onSubmit={login} className='grid content-center gap-2 w-150' method="POST">
+            <form onSubmit={login} className='grid content-center gap-2 w-4/12 mr-5' method="POST">
                 <div className="grid">
                     <label htmlFor="email"/>Email
                     <input type="text" id='email'  
