@@ -20,7 +20,7 @@ export default function CardSetor({setor}: {setor: Setor}) {
         {setor.nome}
       </Text>
 
-      <Button variant="filled">Acessar</Button>
+      <Button component='a' variant="filled" href={`/setor/${setor.id}`}>Acessar</Button>
     </Card>
   );
 }
