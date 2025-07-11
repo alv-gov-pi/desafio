@@ -1,39 +1,51 @@
 'use client'
 import { NavLink } from '@mantine/core';
-import { IconHome2, IconTicket, IconLogout2} from '@tabler/icons-react';
-import {signOut} from "next-auth/react"
+import { IconHome2, IconTicket, IconLogout2, IconChartBar, IconFileBarcode } from '@tabler/icons-react';
+import { signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 
-export default function HeaderApp({usuario_id}: {usuario_id: number}) {
+export default function HeaderApp({ usuario_id }: { usuario_id: number }) {
     const router = useRouter()
-    
-        async function logout(event: any) {
-            event.preventDefault()
-            await signOut({
-                redirect: false
-            })
-    
-            router.replace('/')
-        }
+
+    async function logout(event: any) {
+        event.preventDefault()
+        await signOut({
+            redirect: false
+        })
+
+        router.replace('/')
+    }
     return (
         <header className="w-screen bg-blue-600 text-white h-1/12">
             <nav>
                 <ul className='flex justify-end justify-items-center gap-4 mr-4'>
                     <i><NavLink
-                        href={`/usuario/${usuario_id}/atendimentos`}
-                        label="Atendimentos"
-                        leftSection={<IconTicket size={16} stroke={1.5} />} 
+                        href={"/solicitacoes"}
+                        label="Solicitações"
+                        onClick={event => logout(event)}
+                        leftSection={<IconFileBarcode size={16} stroke={1.5} />}
                     /></i>
                     <i><NavLink
-                        href={`/usuario/${usuario_id}}`}
+                        href={"/paineis"}
+                        label="Paineis"
+                        onClick={event => logout(event)}
+                        leftSection={<IconChartBar size={16} stroke={1.5} />}
+                    /></i>
+                    <i><NavLink
+                        href={`/usuario/${usuario_id}/atendimentos`}
+                        label="Atendimentos"
+                        leftSection={<IconTicket size={16} stroke={1.5} />}
+                    /></i>
+                    <i><NavLink
+                        href={`/usuario/${usuario_id}`}
                         label="Perfil"
-                        leftSection={<IconHome2 size={16} stroke={1.5} />} 
+                        leftSection={<IconHome2 size={16} stroke={1.5} />}
                     /></i>
                     <i><NavLink
                         href={"/"}
                         label="Sair"
                         onClick={event => logout(event)}
-                        leftSection={<IconLogout2 size={16} stroke={1.5} />} 
+                        leftSection={<IconLogout2 size={16} stroke={1.5} />}
                     /></i>
                 </ul>
             </nav>
