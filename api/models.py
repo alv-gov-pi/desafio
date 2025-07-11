@@ -13,7 +13,7 @@ class Setor(models.Model):
     )
     def __str__(self):
         return f"{self.nome}({self.sigla})"
-
+   
 class Servico(models.Model):
     nome = models.CharField(max_length=100, blank=False)
     setor_ofertante = models.ForeignKey(Setor,
