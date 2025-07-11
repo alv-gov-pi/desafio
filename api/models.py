@@ -19,7 +19,7 @@ class Servico(models.Model):
     setor_ofertante = models.ForeignKey(Setor,
         null=True,
         blank=True,
-        related_name='setor_ofertante', on_delete=models.SET_NULL
+        related_name='servicos', on_delete=models.SET_NULL
     )
     def __str__(self):
         return f"{self.nome}" 
