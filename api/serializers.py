@@ -1,28 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento, PainelAvaliacaoServico
-class SetorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Setor
-        fields = ['id','nome', 'sigla', 'setor_superior']
-    
-    def create(self, validated_data):
-        """
-        Cria e retorna um novo Setor a partir de dados válidos.
-        """
-        return Setor.objects.create(**validated_data)
-    
-    def update(self, instance, validated_data):
-        """
-        Atualiza e retorna um Setor a partir de dados válidos.
-        """
-        instance.id = validated_data.get('id', instance.id)
-        instance.nome = validated_data.get('nome', instance.nome)
-        instance.sigla = validated_data.get('sigla', instance.sigla)
-        instance.id = validated_data.get('setor_superior', instance.setor_superior)
-        instance.save()
-        return instance
-
 
 class ServicoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,6 +23,28 @@ class ServicoSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
+class SetorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Setor
+        servicos = ServicoSerializer(many=True, read_only=False)
+        fields = ['id','nome', 'sigla', 'setor_superior', 'servicos']
+    
+    def create(self, validated_data):
+        """
+        Cria e retorna um novo Setor a partir de dados válidos.
+        """
+        return Setor.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        """
+        Atualiza e retorna um Setor a partir de dados válidos.
+        """
+        instance.id = validated_data.get('id', instance.id)
+        instance.nome = validated_data.get('nome', instance.nome)
+        instance.sigla = validated_data.get('sigla', instance.sigla)
+        instance.id = validated_data.get('setor_superior', instance.setor_superior)
+        instance.save()
+        return instance
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
