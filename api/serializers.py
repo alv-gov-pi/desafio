@@ -5,7 +5,7 @@ from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendiment
 class ServicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Servico
-        fields = ['id','nome', 'setor_ofertante']
+        fields = ['id','nome', 'setor_ofertante', 'descricao', 'imagem_url']
     
     def create(self, validated_data):
         """
@@ -20,6 +20,8 @@ class ServicoSerializer(serializers.ModelSerializer):
         instance.id = validated_data.get('id', instance.id)
         instance.nome = validated_data.get('nome', instance.nome)
         instance.setor_ofertante = validated_data.get('setor_ofertante', instance.setor_ofertante)
+        instance.descricao = validated_data.get('descricao', instance.descricao)
+        instance.imagem_url = validated_data.get('descricao', instance.imagem_url)
         instance.save()
         return instance
     
@@ -72,7 +74,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class AtendimentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Atendimento
-        fields = ['id','servico', 'solicitante', 'cadastrado_em', 'atendido']
+        fields = ['id','servico', 'solicitante', 'cadastrado_em', 'atendido', 'responsavel']
     
     def create(self, validated_data):
         """
@@ -89,13 +91,14 @@ class AtendimentoSerializer(serializers.ModelSerializer):
         instance.solicitante = validated_data.solicitante('email', instance.solicitante)
         instance.cadastrado_em = validated_data.get('cadastrado_em', instance.cadastrado_em)
         instance.atendido = validated_data.get('atendido', instance.atendido)
+        instance.responsavel = validated_data.get('responsavel', instance.responsavel)
         instance.save()
         return instance
 
 class AtendimentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Atendimento
-        fields = ['id','servico', 'solicitante', 'cadastrado_em', 'atendido']
+        fields = ['id','servico', 'solicitante', 'cadastrado_em', 'atendido', 'responsavel']
     
     def create(self, validated_data):
         """
@@ -112,6 +115,7 @@ class AtendimentoSerializer(serializers.ModelSerializer):
         instance.solicitante = validated_data.solicitante('email', instance.solicitante)
         instance.cadastrado_em = validated_data.get('cadastrado_em', instance.cadastrado_em)
         instance.atendido = validated_data.get('atendido', instance.atendido)
+        instance.responsavel = validated_data.get('responsavel', instance.responsavel)
         instance.save()
         return instance
 
