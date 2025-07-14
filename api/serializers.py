@@ -47,6 +47,7 @@ class SetorSerializer(serializers.ModelSerializer):
         instance.id = validated_data.get('setor_superior', instance.setor_superior)
         instance.save()
         return instance
+
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
