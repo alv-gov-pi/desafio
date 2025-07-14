@@ -16,6 +16,8 @@ class Setor(models.Model):
    
 class Servico(models.Model):
     nome = models.CharField(max_length=100, blank=False)
+    descricao = models.CharField(max_length=200, blank=True)
+    imagem_url = models.CharField(max_length=200, blank=True)
     setor_ofertante = models.ForeignKey(Setor,
         null=True,
         blank=True,
