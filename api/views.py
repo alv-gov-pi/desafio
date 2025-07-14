@@ -1,9 +1,11 @@
 from rest_framework import generics
 from rest_framework import filters
+from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 from api.serializers import SetorSerializer, ServicoSerializer, UsuarioSerializer, AtendimentoSerializer, AvaliacaoAtendimentoSerializer, PainelAvaliacaoServicoSerializer
 from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento, PainelAvaliacaoServico
-
+from rest_framework.response import Response
+from rest_framework import status
 
 class ListaSetor(generics.ListCreateAPIView):
     queryset = Setor.objects.all()
@@ -37,6 +39,13 @@ class ListaUsuario(generics.ListCreateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
 
+class obterUsuarioPorEmail(generics.RetrieveAPIView):
+    serializer_class = UsuarioSerializer
+    lookup_field = 'email'
+
+    def get_queryset(self):
+        return Usuario.objects.all()
+        
 class DetalhaUsuario(generics.RetrieveUpdateDestroyAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
