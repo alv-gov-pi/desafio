@@ -18,6 +18,7 @@ urlpatterns = [
     path('servicos-filtrados/', views.ListaServicosFiltrados.as_view(), name='lista-servicos-filtrados'),
     path('usuarios/', views.ListaUsuario.as_view()),
     path('usuario/<int:pk>/', views.DetalhaUsuario.as_view()),
+    path('usuario/por-email/<str:email>/', views.obeterUsuarioPorEmail.as_view(), name='obter-usuario-por-email'),
     path('atendimentos/', views.ListaAtendimento.as_view()),
     path('atendimento/<int:pk>/', views.DetalhaAtendimento.as_view()),
     path('avaliacao-atendimentos/', views.ListaAvaliacaoAtendimento.as_view()),
