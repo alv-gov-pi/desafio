@@ -50,6 +50,14 @@ class DetalhaUsuario(generics.RetrieveUpdateDestroyAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
 
+class ListaAtendimentosPorSolicitante(generics.ListAPIView):
+    serializer_class = AtendimentoSerializer
+    lookup_field = 'solicitante'
+
+    def get_queryset(self):
+        solicitante_id = self.kwargs.get(self.lookup_field)
+        return Atendimento.objects.filter(solicitante=solicitante_id)
+
 class ListaAtendimento(generics.ListCreateAPIView):
     queryset = Atendimento.objects.all()
     serializer_class = AtendimentoSerializer
