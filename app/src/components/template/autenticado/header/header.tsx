@@ -20,15 +20,13 @@ export default function HeaderApp({ usuario_id }: { usuario_id: number }) {
             <nav>
                 <ul className='flex justify-end justify-items-center gap-4 mr-4'>
                     <i><NavLink
-                        href={"/solicitacoes"}
+                        href={`/usuario/${usuario_id}/solicitacoes`}
                         label="Solicitações"
-                        onClick={event => logout(event)}
                         leftSection={<IconFileBarcode size={16} stroke={1.5} />}
                     /></i>
                     <i><NavLink
                         href={"/paineis"}
                         label="Paineis"
-                        onClick={event => logout(event)}
                         leftSection={<IconChartBar size={16} stroke={1.5} />}
                     /></i>
                     <i><NavLink
