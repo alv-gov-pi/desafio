@@ -39,7 +39,7 @@ class ListaUsuario(generics.ListCreateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
 
-class obterUsuarioPorEmail(generics.RetrieveAPIView):
+class ObterUsuarioPorEmail(generics.RetrieveAPIView):
     serializer_class = UsuarioSerializer
     lookup_field = 'email'
 
