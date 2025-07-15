@@ -73,6 +73,10 @@ class UsuarioSerializer(serializers.ModelSerializer):
         return instance
     
 class AtendimentoSerializer(serializers.ModelSerializer):
+    servico = ServicoSerializer(read_only=True)
+    solicitante = UsuarioSerializer(read_only=True)
+    responsavel = UsuarioSerializer(read_only=True)
+
     class Meta:
         model = Atendimento
         fields = ['id','servico', 'solicitante', 'cadastrado_em', 'atendido', 'responsavel']
@@ -82,30 +86,6 @@ class AtendimentoSerializer(serializers.ModelSerializer):
         Cria e retorna um novo Usuario a partir de dados válidos.
         """
         return Usuario.objects.create(**validated_data)
-    
-    def update(self, instance, validated_data):
-        """
-        Atualiza e retorna um Atendimento a partir de dados válidos.
-        """
-        instance.id = validated_data.get('id', instance.id)
-        instance.servico = validated_data.get('servico', instance.servico)
-        instance.solicitante = validated_data.solicitante('email', instance.solicitante)
-        instance.cadastrado_em = validated_data.get('cadastrado_em', instance.cadastrado_em)
-        instance.atendido = validated_data.get('atendido', instance.atendido)
-        instance.responsavel = validated_data.get('responsavel', instance.responsavel)
-        instance.save()
-        return instance
-
-class AtendimentoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Atendimento
-        fields = ['id','servico', 'solicitante', 'cadastrado_em', 'atendido', 'responsavel']
-    
-    def create(self, validated_data):
-        """
-        Cria e retorna um novo Atendimento a partir de dados válidos.
-        """
-        return Atendimento.objects.create(**validated_data)
     
     def update(self, instance, validated_data):
         """
