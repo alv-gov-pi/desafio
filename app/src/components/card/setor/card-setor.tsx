@@ -3,7 +3,7 @@ import { Card, Image, Text, Button, Group, CardSection } from '@mantine/core';
 
 export default function CardSetor({setor}: {setor: Setor}) {
   return (
-    <Card shadow="sm" className='size-96' padding="lg" radius="md" withBorder>
+    <Card shadow="sm" className='h-4/12 w-4/12' padding="xs" radius="xs"  withBorder>
       <CardSection>
         <Image
           src="default-setor-profile.png"
@@ -19,7 +19,6 @@ export default function CardSetor({setor}: {setor: Setor}) {
       <Text size="sm" c="dimmed">
         {setor.nome}
       </Text>
-
       <Button component='a' variant="filled" href={`/setor/${setor.id}`}>Acessar</Button>
     </Card>
   );
