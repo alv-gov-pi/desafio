@@ -6,7 +6,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import BotaoExcluirSolicitacao from "@/components/buttons/excluir-solicitacao";
 import React from "react";
-import { IconTrash, IconEdit } from '@tabler/icons-react';
+import { IconEdit } from '@tabler/icons-react';
 
 export default async function solicitacoes() {
     const session = await getServerSession(authOptions)
