@@ -7,6 +7,8 @@ export type Atendimento = {
     solicitante: Usuario,
     responsavel: Usuario,
     atendido: boolean,
-    cadastrado_em: Date
+    cadastrado_em: Date,
+    observacao: string,
+    solucao: string
 }
 
