@@ -51,11 +51,14 @@ class Usuario(AbstractBaseUser):
         return f"{self.nome}" 
 
 class Atendimento(models.Model):
+    observacao =  models.CharField(max_length=200, blank=True)
+    solucao =  models.CharField(max_length=200, blank=True)
     servico = models.ForeignKey(
         Servico,  
         null=True,
         blank=True,
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
+        related_name='servico'
     )
     solicitante = models.ForeignKey(
         Usuario,  
@@ -72,11 +75,11 @@ class Atendimento(models.Model):
         related_name='responsavel'
     )
     cadastrado_em = models.DateTimeField(auto_now_add=True)
+    resolvido_em = models.DateTimeField( null=True)
     atendido = models.BooleanField(default=False)
     
 class AvaliacaoAtendimento(models.Model):
     nota = models.PositiveIntegerField(blank=False, validators=[MinValueValidator(1), MaxValueValidator(5)])
-    models.CharField(max_length=1, blank=False, choices=Genero.choices)
     genero = models.CharField(max_length=1, blank=False, choices=Genero.choices)
     cadastrado_em = models.DateTimeField(auto_now_add=True)
     servico_solicitado = models.ForeignKey(
