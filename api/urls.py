@@ -21,6 +21,7 @@ urlpatterns = [
     path('usuario/por-email/<str:email>/', views.ObterUsuarioPorEmail.as_view(), name='obter-usuario-por-email'),
     path('atendimentos/', views.ListaAtendimento.as_view()),
     path('atendimento/<int:pk>/', views.DetalhaAtendimento.as_view()),
+    path('atendimentos/por-setor/', views.ListaAtendimentosPorSetor.as_view(), name='obter-atendimentos-por-setor'),
     path('solicitacoes/por-solicitante/<int:solicitante>', views.ListaAtendimentosPorSolicitante.as_view(), name='obter-atendimentos-por-solicitante'),
     path('avaliacao-atendimentos/', views.ListaAvaliacaoAtendimento.as_view()),
     path('avaliacao-atendimento/<int:pk>/', views.DetalhaAtendimento.as_view()),
