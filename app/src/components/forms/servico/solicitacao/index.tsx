@@ -4,13 +4,14 @@ import { Textarea, Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Servico } from '@/types/servico';
 import { Usuario } from '@/types/usuario';
+import { redirect } from "next/navigation";
 
 type props = {
     solicitante: Usuario
     servico: Servico
 }
 export default function FormSolicitacaoServico({ props }: { props: props }) {
-    const [detalhamento, setDetalhamento] = useState('');
+    const [observacao, setObservacao] = useState('');
 
     async function enviarSolicitacao(e: any) {
         e.preventDefault();
@@ -20,16 +21,13 @@ export default function FormSolicitacaoServico({ props }: { props: props }) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({"servico": props.servico.id, "solicitante": props.solicitante.id, detalhamento})
+            body: JSON.stringify({"servico": props.servico.id, "solicitante": props.solicitante.id, observacao})
         })
-        console.log(responseAtendimento.json())
+        redirect(`/usuario/${props.solicitante.id}/solicitacoes`)
     }
     const form = useForm({
         mode: 'uncontrolled',
-        initialValues: { detalhamento: '' },
-        validate: {
-            // detalhamento: (value) => (value.length < 5 ? 'Informe os dados solicitados na descrição do serviço' : null),
-        },
+        initialValues: { observacao: '' },
     });
 
     return (
@@ -40,11 +38,11 @@ export default function FormSolicitacaoServico({ props }: { props: props }) {
             <form onSubmit={enviarSolicitacao}>
 
                 <Textarea
-                    label="Detalhamento"
-                    placeholder="Detalhamento"
-                    key={form.key('detalhamento')}
-                    {...form.getInputProps('detalhamento')}
-                    onChange={(e) => setDetalhamento(e.target.value)}
+                    label="observacao"
+                    placeholder="observacao"
+                    key={form.key('observacao')}
+                    {...form.getInputProps('observacao')}
+                    onChange={(e) => setObservacao(e.target.value)}
                 />
                 <Button type="submit" mt="sm">
                     Salvar
