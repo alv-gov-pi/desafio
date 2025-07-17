@@ -6,6 +6,7 @@ from api.serializers import SetorSerializer, ServicoSerializer, UsuarioSerialize
 from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento, PainelAvaliacaoServico
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 
 class ListaSetor(generics.ListCreateAPIView):
     queryset = Setor.objects.all()
@@ -57,6 +58,21 @@ class ListaAtendimentosPorSolicitante(generics.ListAPIView):
     def get_queryset(self):
         solicitante_id = self.kwargs.get(self.lookup_field)
         return Atendimento.objects.filter(solicitante=solicitante_id)
+
+class ListaAtendimentosPorSetor(generics.ListAPIView):
+    serializer_class = AtendimentoSerializer
+
+    def get_queryset(self):
+        ids_param = self.request.query_params.get('ids')
+        if not ids_param:
+            # Se não passou o parâmetro, retorna queryset vazia (ou você pode mudar)
+            return Atendimento.objects.none()
+        try:
+            # transforma string '1,2,3' em lista de ints [1, 2, 3]
+            ids = [int(i) for i in ids_param.split(',')]
+        except ValueError:
+            raise ValidationError({'ids': 'Os IDs devem ser uma lista de números separados por vírgula.'})
+        return Atendimento.objects.filter(servico__in=ids)
 
 class ListaAtendimento(generics.ListCreateAPIView):
     queryset = Atendimento.objects.all()
