@@ -76,10 +76,23 @@ class AtendimentoSerializer(serializers.ModelSerializer):
     servico = serializers.PrimaryKeyRelatedField(queryset=Servico.objects.all())
     solicitante = serializers.PrimaryKeyRelatedField(queryset=Usuario.objects.all())
     responsavel = serializers.PrimaryKeyRelatedField(queryset=Usuario.objects.all(), allow_null=True, required=False)
-     
+    
+    servico_detalhado = ServicoSerializer(source='servico', read_only=True)
+    solicitante_detalhado = UsuarioSerializer(source='solicitante', read_only=True)
+    responsavel_detalhado = UsuarioSerializer(source='responsavel', read_only=True)
+    
     class Meta:
         model = Atendimento
-        fields = ['id','servico', 'solicitante', 'cadastrado_em', 'atendido', 'responsavel', 'observacao', 'solucao', 'resolvido_em']
+        fields = ['id',
+                  'servico', 'servico_detalhado',
+                  'solicitante', 'solicitante_detalhado',
+                  'cadastrado_em', 
+                  'atendido', 
+                  'responsavel', 'responsavel_detalhado',
+                  'observacao', 
+                  'solucao', 
+                  'resolvido_em'
+                ]
     
     def create(self, validated_data):
         """
