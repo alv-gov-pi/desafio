@@ -9,6 +9,9 @@ import { AtendimentoService } from '@/services/AtendimentoService';
 export default async function Atendimentos() {
     const session = await getServerSession(authOptions)
     const servicos = [9];
+    if(!session?.user.id) {
+        throw Error("Erro ao recuperar sessão !!!")
+    }
     const idUsuarioLogado = session?.user.id;
     const servicosString = servicos.toString()
     const atendimentoService = new AtendimentoService();
