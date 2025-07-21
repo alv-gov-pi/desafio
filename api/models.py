@@ -30,6 +30,10 @@ class Genero(models.TextChoices):
     MASCULINO = 'M', 'Masculino'
     FEMININO = 'F', 'Feminino'
 
+class TipoUsuario(models.TextChoices):
+    SOLICITANTE = 'S', 'Solicitante'
+    ATENDENTE = 'A', 'Atendente'
+
 class Usuario(AbstractBaseUser):
     cadastrado_em = models.DateTimeField(auto_now_add=True)
     nome = models.CharField(max_length=100, blank=False)
@@ -97,6 +101,18 @@ class AvaliacaoAtendimento(models.Model):
         related_name='setor_solicitante'
     )
     
+class InteracaoAtencimento(models.Model):
+    texto = models.CharField(max_length=100, blank=False)
+    tipoUsuario = models.CharField(max_length=1, blank=False, choices=TipoUsuario.choices)
+    atendimento = models.ForeignKey (
+        Atendimento,  
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='atendimento'
+    )
+    cadastrado_em = models.DateTimeField(auto_now_add=True)
+
 class PainelAvaliacaoServico(models.Model):
     nome = models.CharField(max_length=100, blank=False)
     servico_avaliado = models.ForeignKey (
