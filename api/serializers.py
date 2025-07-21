@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento, PainelAvaliacaoServico
+from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento, PainelAvaliacaoServico, InteracaoAtencimento
 
 class ServicoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -115,6 +115,27 @@ class AtendimentoSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class InteracaoAtendimentoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InteracaoAtencimento
+        fields = ['id', 'texto', 'atendimento', 'tipoUsuario', 'cadastrado_em']
+    def create(self, validated_data):
+        """
+        Cria e retorna um novo InteracaoAtencimento a partir de dados válidos.
+        """
+        return InteracaoAtencimento.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        """
+        Atualiza e retorna um InteracaoAtencimento a partir de dados válidos.
+        """
+        instance.id = validated_data.get('id', instance.id)
+        instance.texto = validated_data.get('texto', instance.texto)
+        instance.tipoUsuario = validated_data.get('tipoUsuario', instance.tipoUsuario)
+        instance.atendimentoId = validated_data.get('atendimento', instance.atendimentoId)
+        instance.save()
+        return instance
+    
 class AvaliacaoAtendimentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = AvaliacaoAtendimento
