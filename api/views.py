@@ -2,8 +2,8 @@ from rest_framework import generics
 from rest_framework import filters
 from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
-from api.serializers import SetorSerializer, ServicoSerializer, UsuarioSerializer, AtendimentoSerializer, AvaliacaoAtendimentoSerializer, PainelAvaliacaoServicoSerializer
-from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento, PainelAvaliacaoServico
+from api.serializers import SetorSerializer, ServicoSerializer, UsuarioSerializer, AtendimentoSerializer, AvaliacaoAtendimentoSerializer, PainelAvaliacaoServicoSerializer, InteracaoAtendimentoSerializer
+from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento, PainelAvaliacaoServico, InteracaoAtencimento
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
@@ -58,6 +58,14 @@ class ListaAtendimentosPorSolicitante(generics.ListAPIView):
     def get_queryset(self):
         solicitante_id = self.kwargs.get(self.lookup_field)
         return Atendimento.objects.filter(solicitante=solicitante_id)
+    
+class ListaInteracaoPorAtendimento(generics.ListAPIView):
+    serializer_class = InteracaoAtendimentoSerializer
+    lookup_field = 'atendimento'
+
+    def get_queryset(self):
+        atendimento = self.kwargs.get(self.lookup_field)
+        return InteracaoAtencimento.objects.filter(atendimento=atendimento)
 
 class ListaAtendimentosPorSetor(generics.ListAPIView):
     serializer_class = AtendimentoSerializer
