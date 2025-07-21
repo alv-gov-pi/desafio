@@ -3,38 +3,33 @@ import { Button, Group, Table, TableTr, TableTd, TableThead, TableTh, TableTbody
 import { IconEye, IconHandThreeFingers } from '@tabler/icons-react';
 import { Atendimento } from "@/types/atendimento";
 import { formataStringDate } from '@/utils/databr';
-import { useEffect, useRef, useState } from 'react';
+import React, { BaseSyntheticEvent, useState } from 'react';
 import { useSession } from "next-auth/react"
 import { AtendimentoService } from '@/services/AtendimentoService';
+import { redirect } from 'next/navigation';
 
 export default function TabelaAtendimentos({ atendimentos, idUsuarioLogado }: { atendimentos: Atendimento[], idUsuarioLogado: number, }) {
     const atendimentoService = new AtendimentoService();
     const { data: session } = useSession();
-    const tabelaRef = useRef(null);
-    const [linhasAtendimentos, setLinhasAtendimentos] = useState(atendimentos);
 
-    async function atender(event) {
+    let [linhasAtendimentos, setLinhasAtendimentos] = useState(atendimentos);
 
+    async function atender(event: BaseSyntheticEvent) {
         event.stopPropagation();
         const linha = event.target.closest('tr');
         const idAtendimento = linha.dataset.id;
-        const atendimento: Atendimento | undefined = await atendimentoService.obterAtendimentoPorId(idAtendimento);
-        
-        const line = linhasAtendimentos.filter(line => {
-            return  line.id == linha.dataset.id; 
-        });
-        line[0].responsavel = idUsuarioLogado;
-        console.log(line);
-        // const copiaAtendimentos = [...linhasAtendimentos];
-        // copiaAtendimentos.map(atendimento => {
-        //     atendimento.id === idAtendimento ? atendimento.responsavel = idUsuarioLogado : null
-        // })
-
-        atendimentoService.atualizaResponsavel(idUsuarioLogado, atendimento)
-        setLinhasAtendimentos(copiaAtendimentos)
-
+        const atendimento : Atendimento  = await atendimentoService.obterAtendimentoPorId(idAtendimento);
+        const atendimentoAtualizado : Atendimento = await atendimentoService.atualizaResponsavel(idUsuarioLogado, atendimento)
+        const copiaAtendimentos = linhasAtendimentos.map(linha => linha.id == atendimentoAtualizado.id ? linha = atendimentoAtualizado : linha)
+        setLinhasAtendimentos(copiaAtendimentos);       
     }
 
+    function ver(event: BaseSyntheticEvent) {
+        event.stopPropagation();
+        const linha = event.target.closest('tr');
+        const idAtendimento = linha.dataset.id;
+        redirect(`/usuario/${idUsuarioLogado}/atendimentos/${idAtendimento}`)
+    }
 
     return (
         <Table withColumnBorders withTableBorder highlightOnHover striped>
@@ -53,7 +48,7 @@ export default function TabelaAtendimentos({ atendimentos, idUsuarioLogado }: { 
                 {
                     linhasAtendimentos.map((atendimento) => (
 
-                        <TableTr key={`${atendimento.id}`} data-id={atendimento.id} ref={tabelaRef}>
+                        <TableTr key={`${atendimento.id}`} data-id={atendimento.id}>
                             <TableTd>{`${atendimento.id}`}</TableTd>
                             <TableTd>{formataStringDate(atendimento.cadastrado_em)}</TableTd>
                             <TableTd>{atendimento.servico_detalhado.nome}</TableTd>
@@ -62,8 +57,8 @@ export default function TabelaAtendimentos({ atendimentos, idUsuarioLogado }: { 
                             <TableTd>{atendimento.atendido ? 'Sim' : 'Não'}</TableTd>
                             <TableTd>
                                 <Group justify="center">
-                                    <Button variant="default" onClick={e => atender(e)} leftSection={<IconHandThreeFingers size={16} stroke={1.5} />}>Atender</Button>
-                                    <Button variant="default" leftSection={<IconEye size={16} stroke={1.5} />}>Ver</Button>
+                                    <Button disabled={atendimento.responsavel !== null ? true : false} variant="default" onClick={e => atender(e)} leftSection={<IconHandThreeFingers size={16} stroke={1.5} />}>Atender</Button>
+                                    <Button variant="default" onClick={e => ver(e)} leftSection={<IconEye size={16} stroke={1.5} />}>Ver</Button>
                                 </Group>
                             </TableTd>
                         </TableTr>
