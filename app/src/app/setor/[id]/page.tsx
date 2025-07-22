@@ -20,9 +20,11 @@ export default async function setor({ params }: { params: Promise<{ id: number }
   
     return (
         <TemplateApp>
-            <div><h1>Serviços da {setor.nome}({setor.sigla})</h1></div>
-            <div className="flex flex-col gap-5 justify-center mt-2">
-                {servicos.map((servico) => <CardServico key={`${servico.id}`} servico={servico} />)}
+            <div className="space-y-4 rounded-md bg-white p-6 shadow-md border border-gray-200 mt-4 w-10/12">
+                <h1 className="text-xl font-semibold text-content-emphasis">Serviços da {setor.nome}({setor.sigla})</h1>
+                <div className="flex flex-col gap-5 justify-center mt-2">
+                    {servicos.map((servico) => <CardServico key={`${servico.id}`} servico={servico} />)}
+                </div>
             </div>
         </TemplateApp>
     );
