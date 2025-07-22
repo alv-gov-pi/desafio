@@ -81,6 +81,8 @@ class Atendimento(models.Model):
     cadastrado_em = models.DateTimeField(auto_now_add=True)
     resolvido_em = models.DateTimeField( null=True)
     atendido = models.BooleanField(default=False)
+    def __str__(self):
+        return f"{self.id}"
     
 class AvaliacaoAtendimento(models.Model):
     nota = models.PositiveIntegerField(blank=False, validators=[MinValueValidator(1), MaxValueValidator(5)])
@@ -112,7 +114,8 @@ class InteracaoAtencimento(models.Model):
         related_name='atendimento'
     )
     cadastrado_em = models.DateTimeField(auto_now_add=True)
-
+    def __str__(self):
+        return f"{self.atendimento}"
 class PainelAvaliacaoServico(models.Model):
     nome = models.CharField(max_length=100, blank=False)
     servico_avaliado = models.ForeignKey (
