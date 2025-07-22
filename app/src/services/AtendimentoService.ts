@@ -20,6 +20,41 @@ export class AtendimentoService extends BaseService {
         const atendimento: Atendimento = await response.json();
         return atendimento;
     }
+    async finalizarAtendimento(atendimento: Atendimento) {
+        const data = JSON.stringify({
+                "id": atendimento.id,
+                "responsavel": atendimento.responsavel,
+                "servico": atendimento.servico,
+                "solicitante": atendimento.solicitante,
+                "solucao": atendimento.solucao,
+                "atendido": true,
+                "resolvido_em": new Date()
+            })
+        console.log(data)
+        const response = await fetch(`${this.obterUrlDominio()}/${atendimento.id}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: data,
+        });
+    }
+    async adicionarInterecaoAtendimento(interacao: InteracaoAtendimento): Promise<InteracaoAtendimento> {
+        const response = await fetch(`${this.obterUrlDominio()}/${interacao.idAtendimento}/interacao/adicionar/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({'atendimento' : interacao.idAtendimento, 'texto': interacao.texto, 'tipoUsuario': interacao.tipoUsuario})
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro ao enviar interacao ${response}`);
+        }
+
+        const interacaoAtendimento: InteracaoAtendimento = await response.json();
+        return interacaoAtendimento;
+    }
 
     async obterInteracoesPorAtendimeto(idAtendimento: string): Promise<InteracaoAtendimento[]> {
         const response = await fetch(`http://localhost:8000/atendimento/${idAtendimento}/interacoes/`, {
