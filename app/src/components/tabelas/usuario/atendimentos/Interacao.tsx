@@ -4,11 +4,13 @@ import { useState, useRef, useEffect } from 'react';
 import { Box, Paper, Flex, TextInput, Button, Group, Text, rem } from '@mantine/core';
 import { IconSend } from '@tabler/icons-react';
 import { InteracaoAtendimento } from '@/types/interacao-atendimento';
+import { AtendimentoService } from '@/services/AtendimentoService';
 
 
-export function Interacao({interacoes}: {interacoes: InteracaoAtendimento[]}) {
-  const [messages, setMessages] = useState(interacoes);
-  const [newMessage, setNewMessage] = useState('');
+export function Interacao({interacoes, idAtendimento, tipoUsuario}: {interacoes: InteracaoAtendimento[], idAtendimento: string, tipoUsuario: string}) {
+  const atendimentoService = new AtendimentoService;
+  const [listaInteracoes, setListaInteracoes] = useState(interacoes);
+  const [novaInteracao, setNovaInteracao] = useState('');
   const chatEndRef = useRef(null);
 
   // Função para rolar automaticamente para a última mensagem
@@ -19,41 +21,40 @@ export function Interacao({interacoes}: {interacoes: InteracaoAtendimento[]}) {
   // Rola para o final do chat sempre que novas mensagens são adicionadas
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [listaInteracoes]);
 
   // Lógica para enviar uma nova mensagem
   const handleSendMessage = () => {
-    if (newMessage.trim() === '') return;
+    if (novaInteracao.trim() === '') return;
 
-    // Alterna o remetente para simular uma conversa
-    const newSender = messages.length % 2 === 0 ? 'solicitante' : 'atendente';
-
-    const newChat: Interacao = {
-      id: messages.length + 1,
-      texto: newMessage,
-      tipoUsuario: newSender,
-      idAtendimento: 1
+    const novaInteracaoChat: InteracaoAtendimento = {
+      texto: novaInteracao,
+      tipoUsuario: tipoUsuario,
+      idAtendimento: idAtendimento
     };
-
-    setMessages([...messages, newChat]);
-    setNewMessage('');
+    atendimentoService.adicionarInterecaoAtendimento(novaInteracaoChat);
+    setListaInteracoes([...listaInteracoes, novaInteracaoChat]);
+    setNovaInteracao('');
   };
 
-  const adicionarInteracao = (event) => {
+  const adicionarInteracao = (event : any) => {
     if (event.key === 'Enter') {
+      console.log(event)
       event.preventDefault();
       handleSendMessage();
     }
   };
 
   return (
+    <div className="space-y-4 rounded-md bg-white p-6 shadow-md border border-gray-200 mt-4 w-10/12">
+                <h1 className="text-xl font-semibold text-content-emphasis">Interações</h1>
     <Box
       style={{
         display: 'flex',
         flexDirection: 'column',
         height: '80vh',
         width: '100%',
-        maxWidth: rem(2000),
+        maxWidth: rem(1500),
         margin: '0 auto',
         border: '1px solid var(--mantine-color-gray-3)',
         borderRadius: 'var(--mantine-radius-md)',
@@ -70,12 +71,12 @@ export function Interacao({interacoes}: {interacoes: InteracaoAtendimento[]}) {
           gap: 'var(--mantine-spacing-sm)',
         }}
       >
-        {messages.map((message) => {
+        {listaInteracoes.map((message, key) => {
           const isUser = message.tipoUsuario === 'S';
           console.log(message.tipoUsuario)
           return (
             <Flex
-              key={message.id}
+              key={key}
               justify={isUser ? 'flex-end' : 'flex-start'}
             >
               <Paper
@@ -103,15 +104,15 @@ export function Interacao({interacoes}: {interacoes: InteracaoAtendimento[]}) {
           <TextInput
             flex={1}
             placeholder="Adicione informações para o usuário"
-            value={newMessage}
-            onChange={(event) => setNewMessage(event.currentTarget.value)}
+            value={novaInteracao}
+            onChange={(event) => setNovaInteracao(event.currentTarget.value)}
             onKeyDown={adicionarInteracao}
             radius="xl"
           />
           <Button
             onClick={handleSendMessage}
             radius="xl"
-            disabled={!newMessage.trim()}
+            disabled={!novaInteracao.trim()}
             leftSection={<IconSend size={16} />}
           >
             Enviar
@@ -119,5 +120,6 @@ export function Interacao({interacoes}: {interacoes: InteracaoAtendimento[]}) {
         </Group>
       </Box>
     </Box>
+    </div>
   );
 }
