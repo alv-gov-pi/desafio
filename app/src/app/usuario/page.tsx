@@ -18,9 +18,9 @@ export default async function UserHome() {
 
     return (
         <TemplateApp>
-            <div>
-                <h1>Bem vindo, {session?.user?.name} ! as seguintes secretarias ofertam serviços: </h1>
-                <div className="flex flex-row gap-5 flex-wrap justify-center mt-2 h-10/12">
+            <div className="space-y-4 rounded-md bg-white p-6 shadow-md border border-gray-200 mt-4 w-10/12 flex flex-col">
+                <h1 className="text-xl font-semibold text-content-emphasis">Bem vindo, {session?.user?.name} ! os seguintes orgãos ofertam serviços: </h1>
+                <div className="flex flex-row gap-2 flex-wrap mt-2 justify-center">
                     {setores.map(s => <CardSetor key={`${s.id}`} setor={s} />)}
                 </div>
             </div>
