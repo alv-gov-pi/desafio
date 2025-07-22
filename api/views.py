@@ -90,6 +90,14 @@ class DetalhaAtendimento(generics.RetrieveUpdateDestroyAPIView):
     queryset = Atendimento.objects.all()
     serializer_class = AtendimentoSerializer
 
+class ListaInteracaoAtendimento(generics.ListCreateAPIView):
+    queryset = InteracaoAtencimento.objects.all()
+    serializer_class = InteracaoAtendimentoSerializer
+
+class DetalhaInteracaoAtendimento(generics.RetrieveUpdateDestroyAPIView):
+    queryset = InteracaoAtencimento.objects.all()
+    serializer_class = InteracaoAtendimentoSerializer
+
 class ListaAvaliacaoAtendimento(generics.ListCreateAPIView):
     queryset = AvaliacaoAtendimento.objects.all()
     serializer_class = AvaliacaoAtendimentoSerializer
