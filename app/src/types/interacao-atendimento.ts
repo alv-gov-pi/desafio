@@ -1,7 +1,7 @@
 export type InteracaoAtendimento = {
-  id: number,
+  id?: number,
   texto: string,
-  tipoUsuario: String,
-  idAtendimento: number,
+  tipoUsuario: string,
+  idAtendimento: string,
   cadastrado_em?: Date
 }
