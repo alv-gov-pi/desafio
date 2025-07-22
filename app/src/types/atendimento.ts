@@ -12,6 +12,7 @@ export type Atendimento = {
     atendido: boolean,
     cadastrado_em: Date,
     observacao: string,
-    solucao: string
+    solucao: string,
+    resolvido_em?: Date
 }
 
