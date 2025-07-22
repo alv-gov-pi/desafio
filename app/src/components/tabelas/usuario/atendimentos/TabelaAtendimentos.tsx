@@ -40,7 +40,7 @@ export default function TabelaAtendimentos({ atendimentos, idUsuarioLogado }: { 
                     <TableTh>Serviço</TableTh>
                     <TableTh>Resposavel</TableTh>
                     <TableTh>Solicitante</TableTh>
-                    <TableTh>Atendido</TableTh>
+                    <TableTh>Atendido em</TableTh>
                     <TableTh>Ação</TableTh>
                 </TableTr>
             </TableThead>
@@ -54,7 +54,7 @@ export default function TabelaAtendimentos({ atendimentos, idUsuarioLogado }: { 
                             <TableTd>{atendimento.servico_detalhado.nome}</TableTd>
                             <TableTd>{atendimento?.responsavel ? atendimento?.responsavel_detalhado.nome : 'Ainda não atribuído'}</TableTd>
                             <TableTd>{atendimento?.solicitante_detalhado?.nome}</TableTd>
-                            <TableTd>{atendimento.atendido ? 'Sim' : 'Não'}</TableTd>
+                            <TableTd>{atendimento.resolvido_em ? formataStringDate(atendimento.resolvido_em) : 'Não resolvido'}</TableTd>
                             <TableTd>
                                 <Group justify="center">
                                     <Button disabled={atendimento.responsavel !== null ? true : false} variant="default" onClick={e => atender(e)} leftSection={<IconHandThreeFingers size={16} stroke={1.5} />}>Atender</Button>
