@@ -5,23 +5,20 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import React from "react";
 import TabelaSolicitacoes from "@/components/tabelas/usuario/solicitacoes/TabelaSolicitacoes";
+import { AtendimentoService } from "@/services/AtendimentoService";
 
 export default async function solicitacoes() {
     const session = await getServerSession(authOptions)
-    const response = await fetch(`http://localhost:8000/solicitacoes/por-solicitante/7`, {
-        method: "GET"
-    })
-    const solicitacoes: Atendimento[] = await response.json()
-
     if (!session) {
         redirect('/')
     }
+    const usuarioId = session?.user.id;
+    const atendimentoService = new AtendimentoService();
+    const solicitacoes = await atendimentoService.obterSolicitacoesPorSolicitanteId(usuarioId);
+    
     return (
         <TemplateApp >
-            <div className="space-y-4 rounded-md bg-white p-6 shadow-md border border-gray-200 mt-4 w-10/12">
-                <h1 className="text-xl font-semibold text-content-emphasis">Suas solicitações</h1>
-                <TabelaSolicitacoes solicitacoes={solicitacoes}/>
-            </div>
+            <TabelaSolicitacoes solicitacoes={solicitacoes} />
         </TemplateApp>
     )
 }
