@@ -47,6 +47,7 @@ const authOptions: NextAuthOptions = {
         token.email = user.email
         token.accessToken = user.token
         token.refreshToken = user.refresh
+        token.setor = user.setor
       }
       return token
     },
@@ -57,6 +58,7 @@ const authOptions: NextAuthOptions = {
         session.user.email = token.email
         session.user.accessToken = token.accessToken
         session.user.refreshToken = token.refreshToken
+        session.user.setor = token.setor
       }
       return session
     }
