@@ -51,7 +51,16 @@ class SetorSerializer(serializers.ModelSerializer):
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = ['id','nome', 'email', 'password', 'genero', 'esta_ativo', 'setor']
+        setor = serializers.PrimaryKeyRelatedField(queryset=Setor.objects.all())
+        setor_detalhado = SetorSerializer(source='setor', read_only=True)
+        fields = ['id',
+                  'nome', 
+                  'email', 
+                  'password', 
+                  'genero', 
+                  'esta_ativo', 
+                  'setor'
+                ]
     
     def create(self, validated_data):
         """
