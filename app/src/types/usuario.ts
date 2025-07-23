@@ -1,13 +1,13 @@
 import { Setor } from "./setor"
 
 export type Usuario = {
-    id: Number,
+    id: number,
     nome: string,
     email: string,
     password: string,
     esta_ativo: boolean,
     genero: string,
-    setor: Setor
+    setor: number
     cadastrado_em: Date,   
 }
 
