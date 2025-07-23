@@ -3,9 +3,9 @@ import { Usuario } from "./usuario"
 
 export type Atendimento = {
     id: number,
-    servico: Servico,
+    servico: number,
     servico_detalhado: Servico,
-    solicitante: Usuario,
+    solicitante: number,
     solicitante_detalhado: Usuario,
     responsavel: number,
     responsavel_detalhado: Usuario,

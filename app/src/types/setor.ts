@@ -1,7 +1,7 @@
 import { Servico } from "./servico"
 
 export type Setor = {
-    id: Number,
+    id: number,
     nome: string,
     sigla: string
     servicos: Servico[]

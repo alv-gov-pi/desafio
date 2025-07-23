@@ -1,12 +1,9 @@
-import { Servico } from "./servico"
-import { Setor } from "./setor"
-
 export type AvaliacaoAtendimento = {
-    id: Number,
+    id?: number,
     nota: number,
-    genero_solicitante: string
-    servico_solicitado: Servico,
-    setor_solicitante: Setor,
+    genero: string
+    servico_solicitado: number,
+    setor_solicitante: number,
     cadastrado_em: Date
 }
 
