@@ -21,7 +21,7 @@ export default function CardDetalhaAtendimento({ atendimento }: { atendimento: A
                     <div ><span className="font-semibold text-content-emphasis">Abertura:</span> {formataStringDate(atendimento.cadastrado_em)}</div>
                 </div>
                 <div className="flex flex-col">
-                    <div ><span className="font-semibold text-content-emphasis">setor:</span> {atendimento.solicitante_detalhado.setor.nome}</div>
+                    <div ><span className="font-semibold text-content-emphasis">setor:</span> {atendimento.solicitante_detalhado.nome}</div>
                     <div ><span className="font-semibold text-content-emphasis">Serviço:</span> {atendimento.servico_detalhado.nome}</div>
                 </div>
             </div>
