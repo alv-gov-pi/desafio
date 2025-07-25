@@ -5,7 +5,10 @@ import { AvaliacaoAtendimento } from "@/types/avaliacao-atendimento";
 
 export class AtendimentoService extends BaseService {
 
-    protected dominio: string = 'atendimento';
+    constructor() {
+        super()
+        this.dominio = 'atendimento';
+    }
 
     async obterSolicitacoesPorSolicitanteId(solicitanteId: number): Promise<Atendimento[]> {
         const response = await fetch(`http://localhost:8000/solicitacoes/por-solicitante/${solicitanteId}`, {
