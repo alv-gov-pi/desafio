@@ -7,7 +7,8 @@ export type Usuario = {
     password: string,
     esta_ativo: boolean,
     genero: string,
-    setor: number
+    setor: number,
+    setor_detalhado: Setor,
     cadastrado_em: Date,   
 }
 
