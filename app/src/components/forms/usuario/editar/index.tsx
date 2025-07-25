@@ -1,52 +1,49 @@
+'use client'
 import SelectGenero from "@/components/select/genero";
 import SelectSetor from "@/components/select/setor";
+import { UsuarioService } from "@/services/UsuarioService";
 import { Usuario } from "@/types/usuario";
+import { SyntheticEvent, useState } from "react";
 
 function FormEditarUsuario({ usuario }: { usuario: Usuario }) {
-  async function atualizar(formData: FormData) {
-    'use server'
-    try {
-      const response = await fetch(`http://localhost:8000/signup`, {
-        method: "POST",
-        body: formData
-      })
-
-    } catch (error) {
-      console.log(error)
-    }
+  const usuarioService = new UsuarioService();
+  const [usuarioEdidado, setUsuarioEditado ] = useState(usuario);
+  async function atualizar(event: SyntheticEvent) {
+    event.preventDefault();
+    usuarioService.atualizarUsuario(usuarioEdidado);
   }
 
   return (
     <div className="flex flex-col space-y-4 rounded-md bg-white p-6 shadow-md border border-gray-200 mt-4 w-6/12 justify-center items-center">
       <h1 className="text-xl font-semibold text-content-emphasis">Edite seus dados </h1>
-      <form action={atualizar} className='grid content-center gap-2 w-150'>
-        <div className="grid">
+      <form method="POST" className='flex flex-col w-150' onSubmit={atualizar}>
+        <div className="flex flex-col">
           <label htmlFor="nome" />Nome Completo
-          <input type="text" id='nome' className="border border-sky-600 rounded-sm" name="nome" defaultValue={usuario.nome} />
+          <input type="text" id='nome' className="border border-sky-600 rounded-sm" name="nome" defaultValue={usuarioEdidado.nome} onChange={(e) => setUsuarioEditado({...usuarioEdidado, 'nome': e.target.value})}/>
         </div>
-        <div className="grid">
+        <div className="flex flex-col">
           <label htmlFor="email" />Email
-          <input type="text" id='email' className="border border-sky-600 rounded-sm" name="email" defaultValue={usuario.email} />
+          <input type="text" id='email' className="border border-sky-600 rounded-sm" name="email" defaultValue={usuarioEdidado.email} onChange={(e) => setUsuarioEditado({...usuarioEdidado, 'email': e.target.value})}/>
         </div>
-        <div className="grid">
-          <label htmlFor="genero" />Genero
-          <SelectGenero sigla={usuario.genero} />
+        <div className="flex flex-col">
+          <label htmlFor="genero">Genero</label>
+          <SelectGenero sigla={usuarioEdidado.genero} onChange={(e) => setUsuarioEditado({...usuarioEdidado, 'genero': e.target.value})}/>
         </div>
-        <div className="grid">
-          <label htmlFor="setor" />Setor
+        <div className="flex flex-col">
+          <label htmlFor="setor"/>Setor
 
-          <SelectSetor id_setor_atual={String(usuario.setor)} />
+          <SelectSetor id_setor_atual={String(usuarioEdidado.setor)} onChange={(e) => setUsuarioEditado({...usuarioEdidado, 'setor': Number(e.target.value)})} />
         </div>
-        <div className="grid">
+        <div className="flex flex-col">
           <label htmlFor="password" />Nova senha
           <input type="password" id='nova_password' className="border border-sky-600 rounded-sm" name="nova_password" />
         </div>
-        <div className="grid">
-          <label htmlFor="password" />Confirme a Nova senha
+        <div className="flex flex-col">
+          <label htmlFor="confirma_password" />Confirme a Nova senha
           <input type="password" id='confirma_password' className="border border-sky-600 rounded-sm" name="confirma_password" />
         </div>
-        <div className="grid grid-cols-2 content-between">
-          <div><button className="bg-green-600 p-2 rounded-sm w-24 text-white" type="submit">Salvar</button></div>
+        <div className="flex">
+          <div><button className="bg-green-600 p-2 rounded-sm w-24 text-white mt-2" type="submit">Salvar</button></div>
         </div>
       </form>
     </div>
