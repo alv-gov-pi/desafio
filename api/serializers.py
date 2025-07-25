@@ -76,6 +76,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
         instance.nome = validated_data.get('nome', instance.nome)
         instance.email = validated_data.get('email', instance.email)
         instance.password = validated_data.get('password', instance.password)
+        instance.genero = validated_data.get('genero', instance.genero)
         instance.esta_ativo = validated_data.get('esta_ativo', instance.esta_ativo)
         instance.setor = validated_data.get('setor', instance.setor)
         instance.save()
@@ -148,8 +149,10 @@ class InteracaoAtendimentoSerializer(serializers.ModelSerializer):
 class AvaliacaoAtendimentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = AvaliacaoAtendimento
+        setor_solicitante = serializers.PrimaryKeyRelatedField(queryset=Setor.objects.all())
+        servico_solicitado = serializers.PrimaryKeyRelatedField(queryset=Servico.objects.all())
         fields = ['id','nota', 'genero', 'cadastrado_em', 'servico_solicitado', 'setor_solicitante']
-    
+
     def create(self, validated_data):
         """
         Cria e retorna um novo AvaliacaoAtendimento a partir de dados válidos.
