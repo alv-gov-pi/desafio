@@ -2,6 +2,7 @@ import { Atendimento } from "@/types/atendimento";
 import { BaseService } from "./BaseService";
 import { InteracaoAtendimento } from "@/types/interacao-atendimento";
 import { AvaliacaoAtendimento } from "@/types/avaliacao-atendimento";
+import { QuantidadeAtendimentoPorResponsavel } from "@/types/quantidade-atendimento-por-responsavel";
 
 export class AtendimentoService extends BaseService {
 
@@ -127,7 +128,6 @@ export class AtendimentoService extends BaseService {
 
     async obterAtentimentoPorServicos(servicos_string: String): Promise<Atendimento[]> {
         try {
-            console.log(`${this.obterUrlDominio()}/por-setor/?ids=${servicos_string}/`)
             const response = await fetch(`http://localhost:8000/atendimentos/por-setor/?ids=9`, {
                 method: "GET"
             })
@@ -138,4 +138,18 @@ export class AtendimentoService extends BaseService {
             throw new Error(`Erro ao solicitar os dados, detalhes: ${error}`);
         }
     }
+
+    async obterQuantidadedeAtendimentosPorResponsavel(): Promise<QuantidadeAtendimentoPorResponsavel[]> {
+        const response = await fetch(`http://localhost:8000/atendimento/por-responsavel/`, {
+            method: 'GET',
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro ao solicitar os atendimentos por ${response}`);
+        }
+
+        const quantidadeAtendimentoPorResponsavel: QuantidadeAtendimentoPorResponsavel[] = await response.json();
+        return quantidadeAtendimentoPorResponsavel;
+    }
+
 }
