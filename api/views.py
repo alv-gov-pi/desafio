@@ -7,6 +7,10 @@ from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendiment
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
+from rest_framework.views import APIView
+from django.db.models import Count, Q, F, Value, Avg
+from django.db.models.functions import TruncDate
+from collections import defaultdict # Para facilitar a agregação em Python
 
 class ListaSetor(generics.ListCreateAPIView):
     queryset = Setor.objects.all()
@@ -113,3 +117,154 @@ class ListaPainelAvaliacaoServico(generics.ListCreateAPIView):
 class DetalhaPainelAvaliacaoServico(generics.RetrieveUpdateDestroyAPIView):
     queryset = PainelAvaliacaoServico.objects.all()
     serializer_class = PainelAvaliacaoServicoSerializer
+
+class EstatisticasAtendimento(APIView):
+    """
+    Retorna estatísticas de atendimentos, incluindo totais e agrupamento por serviço,
+    responsável, e uma união de datas de cadastro/resolução com status de atendimento.
+    """
+    def get(self, request, *args, **kwargs):
+        # 1. Obter os totais globais
+        totais = Atendimento.objects.aggregate(
+            atendidos=Count('id', filter=Q(atendido=True)),
+            nao_atendidos=Count('id', filter=Q(atendido=False))
+        )
+
+        # 2. Obter as contagens agrupadas por serviço
+        agrupamento_por_servico = Atendimento.objects.values(
+            nome_servico=F('servico__nome')
+        ).annotate(
+            atendidos=Count('id', filter=Q(atendido=True)),
+            nao_atendidos=Count('id', filter=Q(atendido=False))
+        ).order_by('nome_servico')
+
+        # 3. Obter as contagens agrupadas por responsável
+        agrupamento_por_responsavel = Atendimento.objects.annotate(
+            nome_responsavel=F('responsavel__nome')
+        ).values('nome_responsavel').annotate(
+            total_chamados=Count('id')
+        ).order_by('nome_responsavel')
+        
+        # Tratar o caso de responsável nulo
+        for item in agrupamento_por_responsavel:
+            if item['nome_responsavel'] is None:
+                item['nome_responsavel'] = 'Não atribuído'
+
+        # --- NOVA LÓGICA: União de datas de cadastro e resolução com contagem por status ---
+        # Buscar apenas os campos necessários de todos os atendimentos
+        todos_atendimentos = Atendimento.objects.only('cadastrado_em', 'resolvido_em', 'atendido')
+
+        # defaultdict é ótimo para acumular contagens sem verificar se a chave existe
+        # A chave será a data (objeto date), o valor será um dicionário com 'atendidos' e 'nao_atendidos'
+        uniao_datas_contagens = defaultdict(lambda: {'atendidos': 0, 'nao_atendidos': 0})
+
+        for atendimento in todos_atendimentos:
+            # Contagem para a data de cadastro
+            data_cadastro_dt = atendimento.cadastrado_em.date() # Converte datetime para date
+            if atendimento.atendido:
+                uniao_datas_contagens[data_cadastro_dt]['atendidos'] += 1
+            else:
+                uniao_datas_contagens[data_cadastro_dt]['nao_atendidos'] += 1
+            
+            # Contagem para a data de resolução (se o atendimento foi resolvido)
+            if atendimento.resolvido_em:
+                data_resolucao_dt = atendimento.resolvido_em.date() # Converte datetime para date
+                # Contamos o status de atendido/não atendido para a data de resolução
+                if atendimento.atendido:
+                    uniao_datas_contagens[data_resolucao_dt]['atendidos'] += 1
+                else:
+                    uniao_datas_contagens[data_resolucao_dt]['nao_atendidos'] += 1
+
+        # Converter o defaultdict para uma lista de dicionários e ordenar por data
+        agrupamento_uniao_datas = []
+        for data_dt in sorted(uniao_datas_contagens.keys()):
+            agrupamento_uniao_datas.append({
+                'data': data_dt.isoformat(), # Formata a data para string ISO 8601 (ex: "2025-07-24")
+                'atendidos': uniao_datas_contagens[data_dt]['atendidos'],
+                'nao_atendidos': uniao_datas_contagens[data_dt]['nao_atendidos']
+            })
+        # --- FIM DA NOVA LÓGICA ---
+
+        # 5. Construir a resposta em JSON com todos os dados
+        data = {
+            "totais": {
+                "atendidos": totais['atendidos'],
+                "nao_atendidos": totais['nao_atendidos']
+            },
+            "agrupado_por_servico": list(agrupamento_por_servico),
+            "agrupado_por_responsavel": list(agrupamento_por_responsavel),
+            "agrupamento_uniao_datas": agrupamento_uniao_datas # Nova chave para a união de datas
+        }
+        
+        return Response(data)
+    
+class RelatorioMediaAvaliacaoPorServicoSolicitado(APIView):
+    """
+    Retorna um relatório JSON com:
+    - Média da nota agrupada por servico_solicitado.
+    """
+    def get(self, request, *args, **kwargs):
+    
+        media_por_servico = AvaliacaoAtendimento.objects.values(
+            servico_nome=F('servico_solicitado__nome')
+        ).annotate(
+            media_nota=Avg('nota')
+        ).order_by('servico_nome')
+
+        # Tratar casos onde o servico_solicitado é nulo
+        media_por_servico_formatada = []
+        for item in media_por_servico:
+            if item['servico_nome'] is None:
+                item['servico_nome'] = 'Não Informado'
+            # Arredondar a média para 2 casas decimais
+            item['media_nota'] = round(item['media_nota'], 2) if item['media_nota'] is not None else None
+            media_por_servico_formatada.append(item)
+
+        return Response(list(media_por_servico_formatada))
+
+class RelatorioAvaliacaoMediaPorSetorSolicitante(APIView):
+    """
+    Retorna um relatório JSON com:
+    - Média da nota agrupada por setor_solicitante.
+    """
+    def get(self, request, *args, **kwargs):
+        # 1. Média da nota agrupada por setor_solicitante
+        media_por_setor = AvaliacaoAtendimento.objects.values(
+            setor_nome=F('setor_solicitante__nome')
+        ).annotate(
+            media_nota=Avg('nota')
+        ).order_by('setor_nome')
+
+        # Tratar casos onde o setor_solicitante é nulo
+        media_por_setor_formatada = []
+        for item in media_por_setor:
+            if item['setor_nome'] is None:
+                item['setor_nome'] = 'Não Informado'
+            # Arredondar a média para 2 casas decimais para melhor legibilidade
+            item['media_nota'] = round(item['media_nota'], 2) if item['media_nota'] is not None else None
+            media_por_setor_formatada.append(item)
+        return Response(list(media_por_setor_formatada))
+
+class AtendimentosPorResponsavelView(APIView):
+    """
+    Retorna a quantidade de atendimentos agrupados por responsável.
+    Inclui um tratamento para atendimentos sem responsável atribuído.
+    """
+    def get(self, request, *args, **kwargs):
+        # Agrupa os atendimentos pelo nome do responsável e conta a quantidade de atendimentos para cada um.
+        # Usamos F('responsavel__nome') para acessar o nome do usuário responsável.
+        atendimentos_por_responsavel = Atendimento.objects.annotate(
+            nome_responsavel=F('responsavel__nome') # Renomeia o campo para 'nome_responsavel'
+        ).values('nome_responsavel').annotate(
+            quantidade_atendimentos=Count('id') # Conta o número de atendimentos
+        ).order_by('nome_responsavel') # Ordena pelo nome do responsável
+
+        # Formata o resultado para substituir 'None' por 'Não atribuído'
+        # e garante que seja uma lista para a resposta JSON.
+        resultados_formatados = []
+        for item in atendimentos_por_responsavel:
+            if item['nome_responsavel'] is None:
+                item['nome_responsavel'] = 'Não atribuído'
+            resultados_formatados.append(item)
+        
+        return Response(resultados_formatados)
