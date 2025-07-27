@@ -1,5 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions, User } from "next-auth";
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -19,13 +19,15 @@ const authOptions: NextAuthOptions = {
         })
 
         const respJson = await response.json()
-        const user = {
+        const user: User = {
           id: respJson.usuario.id,
           name: respJson.usuario.nome,
+          nome: respJson.usuario.nome,
           email: respJson.usuario.email,
           genero: respJson.usuario.genero,
+          setor: respJson.usuario.setor,
+          access: respJson.access,
           refresh: respJson.refresh,
-          token: respJson.token,
         }
         if (user && response.ok) {
           return user
@@ -45,8 +47,8 @@ const authOptions: NextAuthOptions = {
         token.id = user.id
         token.nome = user.nome
         token.email = user.email
-        token.accessToken = user.token
-        token.refreshToken = user.refresh
+        token.access = user.access
+        token.refresh = user.refresh
         token.setor = user.setor
       }
       return token
@@ -56,8 +58,8 @@ const authOptions: NextAuthOptions = {
         session.user.id = token.id
         session.user.nome = token.nome
         session.user.email = token.email
-        session.user.accessToken = token.accessToken
-        session.user.refreshToken = token.refreshToken
+        session.user.access = token.access
+        session.user.refresh = token.refresh
         session.user.setor = token.setor
       }
       return session
