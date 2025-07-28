@@ -118,10 +118,9 @@ class DetalhaPainelAvaliacaoServico(generics.RetrieveUpdateDestroyAPIView):
     queryset = PainelAvaliacaoServico.objects.all()
     serializer_class = PainelAvaliacaoServicoSerializer
 
-class EstatisticasAtendimento(APIView):
+class EstatisticasTotaisAtendimentos(APIView):
     """
-    Retorna estatísticas de atendimentos, incluindo totais e agrupamento por serviço,
-    responsável, e uma união de datas de cadastro/resolução com status de atendimento.
+    Retorna estatísticas de atendimentos.
     """
     def get(self, request, *args, **kwargs):
         # 1. Obter os totais globais
@@ -130,34 +129,18 @@ class EstatisticasAtendimento(APIView):
             nao_atendidos=Count('id', filter=Q(atendido=False))
         )
 
-        # 2. Obter as contagens agrupadas por serviço
-        agrupamento_por_servico = Atendimento.objects.values(
-            nome_servico=F('servico__nome')
-        ).annotate(
-            atendidos=Count('id', filter=Q(atendido=True)),
-            nao_atendidos=Count('id', filter=Q(atendido=False))
-        ).order_by('nome_servico')
+        return Response({"atendidos": totais['atendidos'], "nao_atendidos": totais['nao_atendidos']})
 
-        # 3. Obter as contagens agrupadas por responsável
-        agrupamento_por_responsavel = Atendimento.objects.annotate(
-            nome_responsavel=F('responsavel__nome')
-        ).values('nome_responsavel').annotate(
-            total_chamados=Count('id')
-        ).order_by('nome_responsavel')
-        
-        # Tratar o caso de responsável nulo
-        for item in agrupamento_por_responsavel:
-            if item['nome_responsavel'] is None:
-                item['nome_responsavel'] = 'Não atribuído'
-
-        # --- NOVA LÓGICA: União de datas de cadastro e resolução com contagem por status ---
+class EstatisticasAtendimentoPorData(APIView):
+    """
+    Retorna estatísticas de atendimentos por data de fechamento e abertura
+    """
+    # defaultdict é ótimo para acumular contagens sem verificar se a chave existe
+    # A chave será a data (objeto date), o valor será um dicionário com 'atendidos' e 'nao_atendidos'
+    def get(self, request, *args, **kwargs):
         # Buscar apenas os campos necessários de todos os atendimentos
         todos_atendimentos = Atendimento.objects.only('cadastrado_em', 'resolvido_em', 'atendido')
-
-        # defaultdict é ótimo para acumular contagens sem verificar se a chave existe
-        # A chave será a data (objeto date), o valor será um dicionário com 'atendidos' e 'nao_atendidos'
         uniao_datas_contagens = defaultdict(lambda: {'atendidos': 0, 'nao_atendidos': 0})
-
         for atendimento in todos_atendimentos:
             # Contagem para a data de cadastro
             data_cadastro_dt = atendimento.cadastrado_em.date() # Converte datetime para date
@@ -165,7 +148,7 @@ class EstatisticasAtendimento(APIView):
                 uniao_datas_contagens[data_cadastro_dt]['atendidos'] += 1
             else:
                 uniao_datas_contagens[data_cadastro_dt]['nao_atendidos'] += 1
-            
+                
             # Contagem para a data de resolução (se o atendimento foi resolvido)
             if atendimento.resolvido_em:
                 data_resolucao_dt = atendimento.resolvido_em.date() # Converte datetime para date
@@ -182,21 +165,8 @@ class EstatisticasAtendimento(APIView):
                 'data': data_dt.isoformat(), # Formata a data para string ISO 8601 (ex: "2025-07-24")
                 'atendidos': uniao_datas_contagens[data_dt]['atendidos'],
                 'nao_atendidos': uniao_datas_contagens[data_dt]['nao_atendidos']
-            })
-        # --- FIM DA NOVA LÓGICA ---
-
-        # 5. Construir a resposta em JSON com todos os dados
-        data = {
-            "totais": {
-                "atendidos": totais['atendidos'],
-                "nao_atendidos": totais['nao_atendidos']
-            },
-            "agrupado_por_servico": list(agrupamento_por_servico),
-            "agrupado_por_responsavel": list(agrupamento_por_responsavel),
-            "agrupamento_uniao_datas": agrupamento_uniao_datas # Nova chave para a união de datas
-        }
-        
-        return Response(data)
+            })   
+        return Response(agrupamento_uniao_datas)
     
 class RelatorioMediaAvaliacaoPorServicoSolicitado(APIView):
     """
