@@ -1,7 +1,7 @@
 'use client'
 import { Paper } from '@mantine/core';
 type props = { titulo: string, 
-    numero: number, 
+    numero: string, 
     cor: string 
 }
 export default function BigNumber({ titulo, numero, cor }: props) {
