@@ -3,6 +3,10 @@ import { BaseService } from "./BaseService";
 import { InteracaoAtendimento } from "@/types/interacao-atendimento";
 import { AvaliacaoAtendimento } from "@/types/avaliacao-atendimento";
 import { QuantidadeAtendimentoPorResponsavel } from "@/types/quantidade-atendimento-por-responsavel";
+import { AtendimentoPorData } from "@/types/atendimento-por-data";
+import { AtendimentoTotais } from "@/types/atendimentos-totais";
+import { AvaliacaoAtendimentoPorSetor } from "@/types/avaliacao-atendimento-por-setor";
+import { AvaliacaoAtendimentoPorServico } from "@/types/avaliacao-atendimento-por-servico";
 
 export class AtendimentoService extends BaseService {
 
@@ -126,9 +130,65 @@ export class AtendimentoService extends BaseService {
         return data;
     }
 
+    async obterEstatisticasAtentimentoPorData(): Promise<AtendimentoPorData[]> {
+
+        const response = await fetch(`${this.obterUrlDominio()}/estatisticas/por-data/`, {
+            method: "GET"
+        })
+
+        const atendimentosPorData: AtendimentoPorData[] = await response.json()
+        if (!response.ok) {
+            throw new Error('Erro ao enviar os dados');
+        }
+        return atendimentosPorData
+
+    }
+
+    async obterEstatisticasTotais(): Promise<AtendimentoTotais> {
+
+        const response = await fetch(`${this.obterUrlDominio()}/estatisticas/totais/`, {
+            method: "GET"
+        })
+
+        const atendimentosTotais: AtendimentoTotais = await response.json()
+        if (!response.ok) {
+            throw new Error('Erro ao enviar os dados');
+        }
+        return atendimentosTotais
+
+    }
+
+    async obterEstatisticasAvaliacaoPorSetorSolicitante(): Promise<AvaliacaoAtendimentoPorSetor[]> {
+
+        const response = await fetch(`${this.obterUrlDominio()}/relatorio/avaliacao/por-sertor-solicitante/`, {
+            method: "GET"
+        })
+
+        const avaliacaoAtendimentoPorSetor: AvaliacaoAtendimentoPorSetor[] = await response.json()
+        if (!response.ok) {
+            throw new Error('Erro ao enviar os dados');
+        }
+        return avaliacaoAtendimentoPorSetor;
+
+    }
+
+    async obterEstatisticasAvaliacaoPorServicoSolicitado(): Promise<AvaliacaoAtendimentoPorServico[]> {
+
+        const response = await fetch(`${this.obterUrlDominio()}/estatisticas/avaliacao/por-servico-solicitado`, {
+            method: "GET"
+        })
+
+        const avaliacaoAtendimentoPorServico : AvaliacaoAtendimentoPorServico[] = await response.json()
+        if (!response.ok) {
+            throw new Error('Erro ao enviar os dados');
+        }
+        return avaliacaoAtendimentoPorServico;
+
+    }
+
     async obterAtentimentoPorServicos(servicos_string: String): Promise<Atendimento[]> {
         try {
-            const response = await fetch(`http://localhost:8000/atendimentos/por-setor/?ids=9`, {
+            const response = await fetch(`${this.obterUrlDominio()}/por-setor/?ids=9`, {
                 method: "GET"
             })
 
@@ -140,7 +200,7 @@ export class AtendimentoService extends BaseService {
     }
 
     async obterQuantidadedeAtendimentosPorResponsavel(): Promise<QuantidadeAtendimentoPorResponsavel[]> {
-        const response = await fetch(`http://localhost:8000/atendimento/por-responsavel/`, {
+        const response = await fetch(`${this.obterUrlDominio()}/por-responsavel/`, {
             method: 'GET',
         });
 
