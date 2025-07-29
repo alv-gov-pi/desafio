@@ -4,7 +4,7 @@ import { IconUser ,IconHome2, IconTicket, IconLogout2, IconChartBar, IconFileBar
 import { signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 
-export default function HeaderApp({ usuario_id }: { usuario_id: number }) {
+export default function HeaderApp({ usuario_id }: { usuario_id?: string }) {
     const router = useRouter()
 
     async function logout(event: any) {
