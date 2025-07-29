@@ -24,6 +24,20 @@ export class UsuarioService extends BaseService {
         return usuarioAtualizado;
     }
 
+    async obterUsuarios(): Promise<Usuario[]> {
+        const response = await fetch(`${this.obterUrlDominio()}`, {
+            method: HTTPMethod.GET, 
+            headers: this.obterHeaders()
+        })
+
+        if (!response.ok) {
+            throw new Error(`Erro ao recuperar os usuarios ${response.text}`);
+        }
+
+        const usuarios: Usuario[] = await response.json();
+        return usuarios;
+    }
+
     async obterUsuarioPorId(usuarioId : number ): Promise<Usuario> {
         const response = await fetch(`${this.obterUrlDominio()}/${usuarioId}`, {
             method: HTTPMethod.GET, 
