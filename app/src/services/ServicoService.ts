@@ -9,7 +9,8 @@ export class ServicoService extends BaseService {
 
     async obterServicoPorId(id: number) {
         const response = await fetch(`${this.obterUrlDominio()}/${id}`, {
-            method: HTTPMethod.GET
+            method: HTTPMethod.GET, 
+            headers: this.obterHeaders()
         })
 
         if (!response.ok) {
