@@ -7,8 +7,8 @@ import { InteracaoAtendimento } from '@/types/interacao-atendimento';
 import { AtendimentoService } from '@/services/AtendimentoService';
 
 
-export function Interacao({interacoes, idAtendimento, tipoUsuario}: {interacoes: InteracaoAtendimento[], idAtendimento: string, tipoUsuario: string}) {
-  const atendimentoService = new AtendimentoService;
+export function Interacao({interacoes, idAtendimento, tipoUsuario, token}: {interacoes: InteracaoAtendimento[], idAtendimento: string, tipoUsuario: string, token: string}) {
+  const atendimentoService = new AtendimentoService(token);
   const [listaInteracoes, setListaInteracoes] = useState(interacoes);
   const [novaInteracao, setNovaInteracao] = useState('');
   const chatEndRef = useRef(null);

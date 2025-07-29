@@ -1,5 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { NextAuthOptions, User } from "next-auth";
+import { AuthService } from "@/services/AuthService";
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -10,15 +11,11 @@ const authOptions: NextAuthOptions = {
         password: { label: "password", type: "password" }
       },
       async authorize(credentials, req) {
-        const formData = new FormData();
-        formData.append('email', `${credentials?.email}`);
-        formData.append('password', `${credentials?.password}`);
-        const response = await fetch('http://localhost:8000/signin', {
-          method: 'POST',
-          body: formData
-        })
+        const authService: AuthService = new AuthService();
+        const response = await authService.login(credentials?.email, credentials?.password);
 
         const respJson = await response.json()
+        console.log("RESPJSON: ", JSON.stringify(respJson))
         const user: User = {
           id: respJson.usuario.id,
           name: respJson.usuario.nome,

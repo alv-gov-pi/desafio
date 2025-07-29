@@ -3,8 +3,8 @@ import { SetorService } from "@/services/SetorService"
 import { Setor } from "@/types/setor"
 import { useEffect, useState } from "react";
 
-export default function SelectSetor({ id_setor_atual, onChange  }: {id_setor_atual?: string, onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void}) {
-    const setorService: SetorService = new SetorService();
+export default function SelectSetor({ id_setor_atual, token, onChange  }: {id_setor_atual?: string, token: string, onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void}) {
+    const setorService: SetorService = new SetorService(token);
     const [setores, setSetores ] = useState<Setor[]>([]);
     useEffect(() => {
          const buscarSetores = async () => {

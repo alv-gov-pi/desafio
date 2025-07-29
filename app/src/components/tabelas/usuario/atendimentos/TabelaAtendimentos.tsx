@@ -8,8 +8,8 @@ import { useSession } from "next-auth/react"
 import { AtendimentoService } from '@/services/AtendimentoService';
 import { redirect } from 'next/navigation';
 
-export default function TabelaAtendimentos({ atendimentos, idUsuarioLogado }: { atendimentos: Atendimento[], idUsuarioLogado: number, }) {
-    const atendimentoService = new AtendimentoService();
+export default function TabelaAtendimentos({ atendimentos, idUsuarioLogado, token }: { atendimentos: Atendimento[], idUsuarioLogado: number, token: string }) {
+    const atendimentoService = new AtendimentoService(token);
     const { data: session } = useSession();
 
     let [linhasAtendimentos, setLinhasAtendimentos] = useState(atendimentos);
@@ -18,10 +18,10 @@ export default function TabelaAtendimentos({ atendimentos, idUsuarioLogado }: { 
         event.stopPropagation();
         const linha = event.target.closest('tr');
         const idAtendimento = linha.dataset.id;
-        const atendimento : Atendimento  = await atendimentoService.obterAtendimentoPorId(idAtendimento);
-        const atendimentoAtualizado : Atendimento = await atendimentoService.atualizaResponsavel(idUsuarioLogado, atendimento)
+        const atendimento: Atendimento = await atendimentoService.obterAtendimentoPorId(idAtendimento);
+        const atendimentoAtualizado: Atendimento = await atendimentoService.atualizaResponsavel(idUsuarioLogado, atendimento)
         const copiaAtendimentos = linhasAtendimentos.map(linha => linha.id == atendimentoAtualizado.id ? linha = atendimentoAtualizado : linha)
-        setLinhasAtendimentos(copiaAtendimentos);       
+        setLinhasAtendimentos(copiaAtendimentos);
     }
 
     function ver(event: BaseSyntheticEvent) {

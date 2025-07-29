@@ -5,8 +5,8 @@ import { UsuarioService } from "@/services/UsuarioService";
 import { Usuario } from "@/types/usuario";
 import { SyntheticEvent, useState } from "react";
 
-function FormEditarUsuario({ usuario }: { usuario: Usuario }) {
-  const usuarioService = new UsuarioService();
+function FormEditarUsuario({ usuario, token }: { usuario: Usuario, token: string }) {
+  const usuarioService = new UsuarioService(token);
   const [usuarioEdidado, setUsuarioEditado ] = useState(usuario);
   async function atualizar(event: SyntheticEvent) {
     event.preventDefault();
@@ -32,7 +32,7 @@ function FormEditarUsuario({ usuario }: { usuario: Usuario }) {
         <div className="flex flex-col">
           <label htmlFor="setor"/>Setor
 
-          <SelectSetor id_setor_atual={String(usuarioEdidado.setor)} onChange={(e) => setUsuarioEditado({...usuarioEdidado, 'setor': Number(e.target.value)})} />
+          <SelectSetor id_setor_atual={String(usuarioEdidado.setor)} token={token} onChange={(e) => setUsuarioEditado({...usuarioEdidado, 'setor': Number(e.target.value)})} />
         </div>
         <div className="flex flex-col">
           <label htmlFor="password" />Nova senha

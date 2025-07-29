@@ -1,21 +1,21 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import TemplateApp from "@/components/template/autenticado/template";
+import { SetorService } from "@/services/SetorService";
 import { Servico } from "@/types/servico";
 import { Setor } from "@/types/setor";
+import { getServerSession } from "next-auth";
 
 export default async function solicititacoes({ params }: { params: Promise<{ id: number }> }) {
     const { id } = await params;
+    const session = await getServerSession(authOptions)
+    const token: string  = session?.user.access;
+    const setorService: SetorService = new SetorService(token);
 
-    const response = await fetch(`http://localhost:8000/setor/${id}`, {
-        method: "GET"
-    })
 
-    const setor: Setor = await response.json();
+    const setor: Setor = await setorService.obterSetorePorId(id);
 
-    const responseServicos = await fetch(`http://localhost:8000/servicos-filtrados/?setor_ofertante=${id}`, {
-        method: "GET"
-    })
 
-    const servicos: Servico[] = await responseServicos.json()
+    const servicos: Servico[] = await setorService.obterServicosPorSetorId(id);
   
     return (
         <TemplateApp>

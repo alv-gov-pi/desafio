@@ -6,8 +6,8 @@ import { AtendimentoService } from '@/services/AtendimentoService';
 import { Atendimento } from '@/types/atendimento';
 import { AvaliacaoAtendimento } from '@/types/avaliacao-atendimento';
 
-export function FormAvaliacaoAtendimento({atendimento} : {atendimento : Atendimento}) {
-    const atendimentoService = new AtendimentoService();
+export function FormAvaliacaoAtendimento({atendimento, token} : {atendimento : Atendimento, token: string}) {
+    const atendimentoService = new AtendimentoService(token);
     const [atendimentoAvaliado, setAtendimentoAvaliado] = useState(atendimento);
     const [avaliacao, setAvaliacao] = useState(0);
 

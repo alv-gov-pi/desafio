@@ -4,8 +4,8 @@ import { Atendimento } from '@/types/atendimento';
 import { formataStringDate } from '@/utils/databr';
 import { useState } from 'react';
 
-export default function CardDetalhaAtendimento({ atendimento }: { atendimento: Atendimento }) {
-    const atendimentoService = new AtendimentoService();
+export default function CardDetalhaAtendimento({ atendimento, token }: { atendimento: Atendimento, token: string }) {
+    const atendimentoService = new AtendimentoService(token);
     const [AtendimentoAtual, setAtendimentoAtual] = useState(atendimento);
 
     return (

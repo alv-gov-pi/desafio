@@ -7,8 +7,8 @@ import { Button, Textarea } from '@mantine/core';
 import { IconCheck } from '@tabler/icons-react';
 import { redirect } from 'next/navigation';
 import { SyntheticEvent, useState } from 'react';
-export default function FormFinalizaAtendimento({atendimento} : {atendimento: Atendimento}) {
-    const atendimentoService = new AtendimentoService();
+export default function FormFinalizaAtendimento({atendimento, token} : {atendimento: Atendimento, token: string}) {
+    const atendimentoService = new AtendimentoService(token);
     const [AtendimentoAtual, setAtendimentoAtual] = useState(atendimento);
     function finalizar(event: SyntheticEvent) {
         event.preventDefault();
@@ -28,7 +28,7 @@ export default function FormFinalizaAtendimento({atendimento} : {atendimento: At
                         <div ><span className="font-semibold text-content-emphasis">Abertura:</span> {formataStringDate(atendimento.cadastrado_em)}</div>
                     </div>
                     <div className="flex flex-col">
-                        <div ><span className="font-semibold text-content-emphasis">setor:</span> {atendimento.solicitante_detalhado.setor_detalhado.nome}</div>
+                        <div ><span className="font-semibold text-content-emphasis">setor:</span> {atendimento.solicitante_detalhado.setor_detalhado}</div>
                         <div ><span className="font-semibold text-content-emphasis">Serviço:</span> {atendimento.servico_detalhado.nome}</div>
                     </div>
                 </div>

@@ -11,10 +11,14 @@ import { AvaliacaoAtendimentoPorServico } from "@/types/avaliacao-atendimento-po
 import { AvaliacaoAtendimentoPorSetor } from "@/types/avaliacao-atendimento-por-setor";
 import { QuantidadeAtendimentoPorResponsavel } from "@/types/quantidade-atendimento-por-responsavel";
 import { formataParaTresDigitos } from "@/utils/formataNumero"; 
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
 export default async function paineis({ params }: { params: Promise<{ id: number }> }) {
     const { id } = await params;
-    const atendimentoService = new AtendimentoService();
+    const session = await getServerSession(authOptions)
+    const token: string  = session?.user.access;
+    const atendimentoService = new AtendimentoService(token);
     const atendimentoPorResponsavel: QuantidadeAtendimentoPorResponsavel[] = await atendimentoService.obterQuantidadedeAtendimentosPorResponsavel();
     console.log(atendimentoPorResponsavel);
     const media_nota_por_setor: AvaliacaoAtendimentoPorSetor[] = await atendimentoService.obterEstatisticasAvaliacaoPorSetorSolicitante()

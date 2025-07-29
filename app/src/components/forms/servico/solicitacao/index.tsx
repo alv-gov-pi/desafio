@@ -5,24 +5,23 @@ import { useEffect, useState } from 'react';
 import { Servico } from '@/types/servico';
 import { Usuario } from '@/types/usuario';
 import { redirect } from "next/navigation";
+import { AtendimentoService } from '@/services/AtendimentoService';
+import { Atendimento } from '@/types/atendimento';
 
 type props = {
     solicitante: Usuario
     servico: Servico
+    token: string
 }
 export default function FormSolicitacaoServico({ props }: { props: props }) {
     const [observacao, setObservacao] = useState('');
+    const atendimentoService: AtendimentoService = new AtendimentoService(props.token);
 
     async function enviarSolicitacao(e: any) {
         e.preventDefault();
-
-        const responseAtendimento = await fetch(`http://localhost:8000/atendimentos/`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({"servico": props.servico.id, "solicitante": props.solicitante.id, observacao})
-        })
+        console.log(e);
+        const atendimento: Atendimento = {"servico": props.servico.id, "solicitante": props.solicitante.id, "observacao": observacao};
+        atendimentoService.adicionarAtendimento(atendimento)
         redirect(`/usuario/${props.solicitante.id}/solicitacoes`)
     }
     const form = useForm({

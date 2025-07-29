@@ -4,13 +4,13 @@ import CardSetor from "@/components/card/setor/card-setor";
 import TemplateApp from "@/components/template/autenticado/template";
 import { redirect } from "next/navigation";
 import { Setor } from "@/types/setor";
+import { SetorService } from "@/services/SetorService";
 
 export default async function UserHome() {
     const session = await getServerSession(authOptions)
-    const response = await fetch(`http://localhost:8000/setores.json`, {
-        method: "GET"
-    })
-    const setores: Setor[] = await response.json()
+    const token: string  = session?.user.access;
+    const setorService: SetorService = new SetorService(token);
+    const setores: Setor[] = await setorService.obterTodosSetores();
 
     if (!session) {
         redirect('/')

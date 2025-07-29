@@ -20,7 +20,7 @@ function FormLogin() {
         })
 
         if (result?.error) {
-            console.log(result)
+            console.log("FORM LOGIN:",result)
             return
         }
 

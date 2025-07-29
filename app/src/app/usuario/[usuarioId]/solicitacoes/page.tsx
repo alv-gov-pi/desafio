@@ -1,5 +1,4 @@
 import TemplateApp from "@/components/template/autenticado/template";
-import { Atendimento } from "@/types/atendimento";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
@@ -9,16 +8,14 @@ import { AtendimentoService } from "@/services/AtendimentoService";
 
 export default async function solicitacoes() {
     const session = await getServerSession(authOptions)
-    if (!session) {
-        redirect('/')
-    }
+    const token: string = session?.user.access;
     const usuarioId = session?.user.id;
-    const atendimentoService = new AtendimentoService();
+    const atendimentoService = new AtendimentoService(token);
     const solicitacoes = await atendimentoService.obterSolicitacoesPorSolicitanteId(usuarioId);
     
     return (
         <TemplateApp >
-            <TabelaSolicitacoes solicitacoes={solicitacoes} />
+            <TabelaSolicitacoes solicitacoes={solicitacoes} token={token} />
         </TemplateApp>
     )
 }
