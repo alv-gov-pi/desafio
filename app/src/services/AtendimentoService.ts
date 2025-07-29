@@ -7,27 +7,35 @@ import { AtendimentoPorData } from "@/types/atendimento-por-data";
 import { AtendimentoTotais } from "@/types/atendimentos-totais";
 import { AvaliacaoAtendimentoPorSetor } from "@/types/avaliacao-atendimento-por-setor";
 import { AvaliacaoAtendimentoPorServico } from "@/types/avaliacao-atendimento-por-servico";
+import HTTPMethod from "http-method-enum";
 
 export class AtendimentoService extends BaseService {
 
-    constructor() {
-        super()
+    constructor(token: string) {
+        super(token)
         this.dominio = 'atendimento';
     }
 
     async obterSolicitacoesPorSolicitanteId(solicitanteId: number): Promise<Atendimento[]> {
-        const response = await fetch(`http://localhost:8000/solicitacoes/por-solicitante/${solicitanteId}`, {
-            method: "GET"
+        const response = await fetch(`${this.baseUrl}/solicitacoes/por-solicitante/${solicitanteId}`, {
+            method: HTTPMethod.GET,
+            headers: this.obterHeaders()
         })
         const solicitacoes: Atendimento[] = await response.json()
         return solicitacoes
     }
+
+    async exluirAtendimento(id: number) {
+        const response = await fetch(`${this.obterUrlDominio()}/${id}/`, {
+            method: HTTPMethod.DELETE,
+            headers: this.obterHeaders()
+        })
+    }
+
     async obterAtendimentoPorId(idAtendimento: string): Promise<Atendimento> {
         const response = await fetch(`${this.obterUrlDominio()}/${idAtendimento}/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
+            method: HTTPMethod.GET,
+            headers: this.obterHeaders()
         });
 
         if (!response.ok) {
@@ -37,6 +45,27 @@ export class AtendimentoService extends BaseService {
         const atendimento: Atendimento = await response.json();
         return atendimento;
     }
+
+    async adicionarAtendimento(atendimento: Atendimento) {
+        const response = await fetch(`${this.obterUrlDominio()}/`, {
+            method: HTTPMethod.POST,
+            headers: this.obterHeaders(),
+            body: JSON.stringify({
+                "servico": atendimento.servico,
+                "solicitante": atendimento.solicitante,
+                "observacao": atendimento.observacao
+            })
+        })
+
+        if (!response.ok) {
+            throw new Error(`Erro ao cadastrar novo atendimento ${response}`);
+        }
+
+        const novoAtendimento: Atendimento = await response.json();
+        return novoAtendimento;
+
+    }
+
     async finalizarAtendimento(atendimento: Atendimento) {
         const data = JSON.stringify({
             "id": atendimento.id,
@@ -49,10 +78,8 @@ export class AtendimentoService extends BaseService {
         })
         console.log(data)
         const response = await fetch(`${this.obterUrlDominio()}/${atendimento.id}/`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            method: HTTPMethod.PUT,
+            headers: this.obterHeaders(),
             body: data,
         });
     }
@@ -60,10 +87,8 @@ export class AtendimentoService extends BaseService {
     async adicionarAvaliacaoAtendimento(avaliacaoAtendimento: AvaliacaoAtendimento, idAtendimento: number) {
         console.log(avaliacaoAtendimento)
         const response = await fetch(`${this.obterUrlDominio()}/${idAtendimento}/avaliacao/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            method: HTTPMethod.POST,
+            headers: this.obterHeaders(),
             body: JSON.stringify(avaliacaoAtendimento)
         });
 
@@ -77,10 +102,8 @@ export class AtendimentoService extends BaseService {
 
     async adicionarInterecaoAtendimento(interacao: InteracaoAtendimento): Promise<InteracaoAtendimento> {
         const response = await fetch(`${this.obterUrlDominio()}/${interacao.idAtendimento}/interacao/adicionar/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            method: HTTPMethod.POST,
+            headers: this.obterHeaders(),
             body: JSON.stringify({ 'atendimento': interacao.idAtendimento, 'texto': interacao.texto, 'tipoUsuario': interacao.tipoUsuario })
         });
 
@@ -93,15 +116,13 @@ export class AtendimentoService extends BaseService {
     }
 
     async obterInteracoesPorAtendimeto(idAtendimento: string): Promise<InteracaoAtendimento[]> {
-        const response = await fetch(`http://localhost:8000/atendimento/${idAtendimento}/interacoes/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
+        const response = await fetch(`${this.obterUrlDominio()}/${idAtendimento}/interacoes/`, {
+            method: HTTPMethod.GET,
+            headers: this.obterHeaders()
         });
 
         if (!response.ok) {
-            throw new Error(`Erro ao enviar os dados ${response}`);
+            throw new Error(`Erro ao enviar os dados do atentimento ${idAtendimento}: Detalhes ${JSON.stringify(response)}`);
         }
 
         const interacoes: InteracaoAtendimento[] = await response.json();
@@ -110,10 +131,8 @@ export class AtendimentoService extends BaseService {
 
     async atualizaResponsavel(idUsuarioLogado: Number, atendimento: Atendimento): Promise<Atendimento> {
         const response = await fetch(`${this.obterUrlDominio()}/${atendimento.id}/`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            method: HTTPMethod.PUT,
+            headers: this.obterHeaders(),
             body: JSON.stringify({
                 "id": atendimento.id,
                 "responsavel": idUsuarioLogado,
@@ -133,7 +152,8 @@ export class AtendimentoService extends BaseService {
     async obterEstatisticasAtentimentoPorData(): Promise<AtendimentoPorData[]> {
 
         const response = await fetch(`${this.obterUrlDominio()}/estatisticas/por-data/`, {
-            method: "GET"
+            method: HTTPMethod.GET,
+            headers: this.obterHeaders()
         })
 
         const atendimentosPorData: AtendimentoPorData[] = await response.json()
@@ -147,7 +167,8 @@ export class AtendimentoService extends BaseService {
     async obterEstatisticasTotais(): Promise<AtendimentoTotais> {
 
         const response = await fetch(`${this.obterUrlDominio()}/estatisticas/totais/`, {
-            method: "GET"
+            method: HTTPMethod.GET,
+            headers: this.obterHeaders()
         })
 
         const atendimentosTotais: AtendimentoTotais = await response.json()
@@ -161,7 +182,8 @@ export class AtendimentoService extends BaseService {
     async obterEstatisticasAvaliacaoPorSetorSolicitante(): Promise<AvaliacaoAtendimentoPorSetor[]> {
 
         const response = await fetch(`${this.obterUrlDominio()}/relatorio/avaliacao/por-sertor-solicitante/`, {
-            method: "GET"
+            method: HTTPMethod.GET,
+            headers: this.obterHeaders()
         })
 
         const avaliacaoAtendimentoPorSetor: AvaliacaoAtendimentoPorSetor[] = await response.json()
@@ -175,10 +197,11 @@ export class AtendimentoService extends BaseService {
     async obterEstatisticasAvaliacaoPorServicoSolicitado(): Promise<AvaliacaoAtendimentoPorServico[]> {
 
         const response = await fetch(`${this.obterUrlDominio()}/estatisticas/avaliacao/por-servico-solicitado`, {
-            method: "GET"
+            method: HTTPMethod.GET,
+            headers: this.obterHeaders()
         })
 
-        const avaliacaoAtendimentoPorServico : AvaliacaoAtendimentoPorServico[] = await response.json()
+        const avaliacaoAtendimentoPorServico: AvaliacaoAtendimentoPorServico[] = await response.json()
         if (!response.ok) {
             throw new Error('Erro ao enviar os dados');
         }
@@ -187,24 +210,28 @@ export class AtendimentoService extends BaseService {
     }
 
     async obterAtentimentoPorServicos(servicos_string: String): Promise<Atendimento[]> {
-        try {
-            const response = await fetch(`${this.obterUrlDominio()}/por-setor/?ids=9`, {
-                method: "GET"
-            })
 
-            const atendimentos: Atendimento[] = await response.json()
-            return atendimentos
-        } catch (error) {
-            throw new Error(`Erro ao solicitar os dados, detalhes: ${error}`);
+        const response = await fetch(`${this.obterUrlDominio()}/por-setor/?ids=${servicos_string}`, {
+            method: HTTPMethod.GET,
+            headers: this.obterHeaders()
+        })
+
+        if (!response.ok) {
+            throw new Error(`Erro ao solicitar os dados dos atendimentos, detalhes: ${response}`);
         }
+
+        const atendimentos: Atendimento[] = await response.json()
+        return atendimentos
     }
 
     async obterQuantidadedeAtendimentosPorResponsavel(): Promise<QuantidadeAtendimentoPorResponsavel[]> {
         const response = await fetch(`${this.obterUrlDominio()}/por-responsavel/`, {
-            method: 'GET',
+            method: HTTPMethod.GET,
+            headers: this.obterHeaders()
         });
 
         if (!response.ok) {
+            console.log("response ", response.statusText, response.url, response.status, response.headers, response.body, response.type, response.bodyUsed)
             throw new Error(`Erro ao solicitar os atendimentos por ${response}`);
         }
 
