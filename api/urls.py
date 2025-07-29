@@ -12,12 +12,12 @@ from api.signup import Signup
 from api.signin import Signin
 
 urlpatterns = [
-    path('setores/', views.ListaSetor.as_view()),
+    path('setor/', views.ListaSetor.as_view()),
     path('setor/<int:pk>/', views.DetalhaSetor.as_view()),
-    path('servicos/', views.ListaServico.as_view()),
+    path('servico/', views.ListaServico.as_view()),
     path('servico/<int:pk>/', views.DetalhaServico.as_view()),
     path('servicos-filtrados/', views.ListaServicosFiltrados.as_view(), name='lista-servicos-filtrados'),
-    path('usuarios/', views.ListaUsuario.as_view()),
+    path('usuario/', views.ListaUsuario.as_view()),
     path('usuario/<int:pk>/', views.DetalhaUsuario.as_view()),
     path('usuario/por-email/<str:email>/', views.ObterUsuarioPorEmail.as_view(), name='obter-usuario-por-email'),
     path('atendimentos/', views.ListaAtendimento.as_view()),
