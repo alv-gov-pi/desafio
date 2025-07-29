@@ -10,7 +10,7 @@ export class SetorService extends BaseService {
     }
 
     async obterTodosSetores(): Promise<Setor[]> {
-        const response = await fetch(`${this.obterUrlDominio()}es/`, {
+        const response = await fetch(`${this.obterUrlDominio()}/`, {
             method: HTTPMethod.GET,
             headers: this.obterHeaders()
         })
