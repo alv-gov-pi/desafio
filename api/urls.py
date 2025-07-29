@@ -1,5 +1,6 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.permissions import AllowAny
 ##Token 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -23,22 +24,22 @@ urlpatterns = [
     path('atendimento/<int:pk>/', views.DetalhaAtendimento.as_view()),
     path('atendimento/estatisticas/totais/', views.EstatisticasTotaisAtendimentos.as_view()),
     path('atendimento/estatisticas/por-data/', views.EstatisticasAtendimentoPorData.as_view()),
-    path('atendimento/estatisticas/avaliacao/por-servico-solicitado', views.RelatorioMediaAvaliacaoPorServicoSolicitado.as_view()),
+    path('atendimento/estatisticas/avaliacao/por-servico-solicitado/', views.RelatorioMediaAvaliacaoPorServicoSolicitado.as_view()),
     path('atendimento/<int:atendimento>/interacoes/', views.ListaInteracaoPorAtendimento.as_view()),
     path('atendimento/por-responsavel/', views.AtendimentosPorResponsavelView.as_view()),
     path('atendimento/relatorio/avaliacao/por-sertor-solicitante/', views.RelatorioAvaliacaoMediaPorSetorSolicitante.as_view()),
     path('atendimento/<int:atendimento>/interacao/adicionar/', views.ListaInteracaoAtendimento.as_view()),
     path('atendimento/<int:atendimento>/avaliacao/', views.ListaAvaliacaoAtendimento.as_view()),
-    path('atendimentos/por-setor/', views.ListaAtendimentosPorSetor.as_view(), name='obter-atendimentos-por-setor'),
+    path('atendimento/por-setor/', views.ListaAtendimentosPorSetor.as_view(), name='obter-atendimentos-por-setor'),
     path('solicitacoes/por-solicitante/<int:solicitante>', views.ListaAtendimentosPorSolicitante.as_view(), name='obter-atendimentos-por-solicitante'),
     path('avaliacao-atendimentos/', views.ListaAvaliacaoAtendimento.as_view()),
     path('avaliacao-atendimento/<int:pk>/', views.DetalhaAtendimento.as_view()),
     path('painel-avaliacao-servicos/', views.ListaPainelAvaliacaoServico.as_view()),
     path('painel-avaliacao-servico/<int:pk>/', views.DetalhaPainelAvaliacaoServico.as_view()),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('signin', Signin.as_view()),
-    path('signup', Signup.as_view()),
+    path('api/token/', TokenObtainPairView.as_view(permission_classes=[AllowAny]), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(permission_classes=[AllowAny]), name='token_refresh'),
+    path('signin', Signin.as_view(permission_classes=[AllowAny])),
+    path('signup', Signup.as_view(permission_classes=[AllowAny])),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
