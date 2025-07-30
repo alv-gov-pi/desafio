@@ -1,6 +1,7 @@
 import SelectSetor from "@/components/select/setor";
+import { Setor } from "@/types/setor";
 
-function FormCadastroUsuario() {
+function FormCadastroUsuario({setores}: {setores: Setor[]}) {
   async function signup(formData: FormData) {
     'use server'
     try {
@@ -38,7 +39,7 @@ function FormCadastroUsuario() {
         </div>
         <div className="flex flex-col">
           <label htmlFor="setor" />Setor
-          <SelectSetor />
+          <SelectSetor setores={setores}/>
         </div>
         <div className="flex content-between">
           <div><button className="bg-green-600 p-2 rounded-sm w-24 text-white" type="submit">Salvar</button></div>
