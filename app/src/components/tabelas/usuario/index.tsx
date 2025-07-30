@@ -2,15 +2,7 @@
 import { Usuario } from "@/types/usuario";
 import { useState, useEffect } from "react";
 
-export default function TabelaUsuario() {
-    const [usuarios, setUsuarios] = useState([])
-    useEffect(() => {
-        fetch('http://127.0.0.1:8000/usuarios.json')
-        .then(res => res.json())
-        .then(data => setUsuarios(data.results))
-
-    }, [])
-    
+export default function TabelaUsuario({usuarios }: {usuarios: Usuario[]}) {
     return (
         <table className="border-separate border-spacing-3 border border-gray-400">
             <caption className="caption-top">
