@@ -55,5 +55,9 @@ export const config = {
     // O matcher define quais rotas o middleware deve ser aplicado.
     // Isso inclui a raiz, qualquer coisa dentro de /usuario/, e qualquer outra rota que você queira proteger.
     // A expressão regular exclui arquivos estáticos e APIs para não interferir.
-    matcher: ['/', '/usuario/:path*', '/((?!api|_next/static|_next/image|favicon.ico).*)'],
+    matcher: [
+        '/', 
+        '/usuario/:path*', 
+        '/((?!api|_next/static|_next/image|favicon.ico|image).*)',
+    ],
 };
