@@ -1,18 +1,7 @@
 'use client'
-import { SetorService } from "@/services/SetorService"
 import { Setor } from "@/types/setor"
-import { useEffect, useState } from "react";
 
-export default function SelectSetor({ id_setor_atual, token, onChange  }: {id_setor_atual?: string, token: string, onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void}) {
-    const setorService: SetorService = new SetorService(token);
-    const [setores, setSetores ] = useState<Setor[]>([]);
-    useEffect(() => {
-         const buscarSetores = async () => {
-            const setoresRecuperados: Setor[] = await setorService.obterTodosSetores();
-            setSetores(setoresRecuperados);
-         }
-         buscarSetores()
-    }, [setores])
+export default function SelectSetor({ id_setor_atual, setores, onChange  }: {id_setor_atual?: string, setores: Setor[], onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void}) {
    
     return (
         <select name="setor" id="setor" className="border border-sky-600 rounded-sm" defaultValue={id_setor_atual} onChange={onChange}>
