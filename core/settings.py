@@ -44,7 +44,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "SLIDING_TOKEN_LIFETIME": timedelta(days=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
 }
 
 INSTALLED_APPS = [
