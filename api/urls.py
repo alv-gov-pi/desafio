@@ -12,8 +12,9 @@ from api.signup import Signup
 from api.signin import Signin
 
 urlpatterns = [
-    path('setor/', views.ListaSetor.as_view()),
+    path('setor/', views.ListaSetor.as_view(permission_classes=[AllowAny])),
     path('setor/<int:pk>/', views.DetalhaSetor.as_view()),
+    path('setor/estatistica/genero/', views.VwEstatatisticasSetorGeneroView.as_view()),
     path('servico/', views.ListaServico.as_view()),
     path('servico/<int:pk>/', views.DetalhaServico.as_view()),
     path('servicos-filtrados/', views.ListaServicosFiltrados.as_view(), name='lista-servicos-filtrados'),
