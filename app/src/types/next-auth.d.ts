@@ -10,6 +10,7 @@ declare module 'next-auth' {
             refresh: string | undefined,
             access: string | undefined,
             setor: number | undefined,
+            accessTokenExpires: number | undefined,
         }
     }
     interface User {
@@ -18,6 +19,7 @@ declare module 'next-auth' {
         genero: string,
         refresh: string,
         access: string,
+        accessTokenExpires: number | undefined,
         setor: number,
     }
 }
@@ -30,6 +32,7 @@ declare module "next-auth/jwt" {
         genero: string | undefined,
         refresh: string | undefined,
         access: string | undefined,
+        accessTokenExpires: number | undefined,
         setor: number | undefined,
     }
 }
