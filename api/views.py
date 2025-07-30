@@ -1,9 +1,28 @@
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
-from api.serializers import SetorSerializer, ServicoSerializer, UsuarioSerializer, AtendimentoSerializer, AvaliacaoAtendimentoSerializer, PainelAvaliacaoServicoSerializer, InteracaoAtendimentoSerializer
-from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento, PainelAvaliacaoServico, InteracaoAtencimento
+from api.serializers import (
+    SetorSerializer, 
+    ServicoSerializer, 
+    UsuarioSerializer, 
+    AtendimentoSerializer, 
+    AvaliacaoAtendimentoSerializer, 
+    PainelAvaliacaoServicoSerializer, 
+    InteracaoAtendimentoSerializer, 
+    VwEstatatisticasSetorGeneroSerializer
+    )
+from api.models import (
+    Setor, 
+    Servico, 
+    Usuario, 
+    Atendimento, 
+    AvaliacaoAtendimento, 
+    PainelAvaliacaoServico, 
+    InteracaoAtencimento, 
+    VwEstatatisticasSetorGenero
+)
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
@@ -13,6 +32,7 @@ from django.db.models.functions import TruncDate
 from collections import defaultdict # Para facilitar a agregação em Python
 
 class ListaSetor(generics.ListCreateAPIView):
+    permission_classes=[AllowAny]
     queryset = Setor.objects.all()
     serializer_class = SetorSerializer
 
@@ -238,3 +258,10 @@ class AtendimentosPorResponsavelView(APIView):
             resultados_formatados.append(item)
         
         return Response(resultados_formatados)
+
+class VwEstatatisticasSetorGeneroView(APIView):
+     def get(self, request):
+        estatisticas = VwEstatatisticasSetorGenero.objects.all()
+        serializer = VwEstatatisticasSetorGeneroSerializer(estatisticas, many=True)
+        return Response(serializer.data)
+        
