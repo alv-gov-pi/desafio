@@ -1,7 +1,7 @@
 'use client'
 import { useForm } from '@mantine/form';
 import { Textarea, Button } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Servico } from '@/types/servico';
 import { Usuario } from '@/types/usuario';
 import { redirect } from "next/navigation";
