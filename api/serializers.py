@@ -1,6 +1,15 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from api.models import Setor, Servico, Usuario, Atendimento, AvaliacaoAtendimento, PainelAvaliacaoServico, InteracaoAtencimento
+from api.models import (
+    Setor, 
+    Servico, 
+    Usuario, 
+    Atendimento, 
+    AvaliacaoAtendimento, 
+    PainelAvaliacaoServico, 
+    InteracaoAtencimento, 
+    VwEstatatisticasSetorGenero
+)
 
 class ServicoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -192,3 +201,8 @@ class PainelAvaliacaoServicoSerializer(serializers.ModelSerializer):
         instance.esta_visivel = validated_data.genero('esta_visivel', instance.esta_visivel)
         instance.save()
         return instance
+    
+class VwEstatatisticasSetorGeneroSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VwEstatatisticasSetorGenero
+        fields = ['setor_id','setor_nome', 'genero', 'quantidade']
