@@ -127,3 +127,13 @@ class PainelAvaliacaoServico(models.Model):
         related_name='servico_avaliado'
     )
     esta_visivel = models.BooleanField(default=False)
+
+class VwEstatatisticasSetorGenero(models.Model):
+     id = models.CharField(primary_key=True, max_length=255)
+     setor_id = models.IntegerField()
+     setor_nome = models.CharField(max_length=200)
+     genero = models.CharField(max_length=1, blank=False, choices=Genero.choices)
+     quantidade = models.IntegerField()
+     class Meta:
+        managed = False
+        db_table = 'vw_estatistica_setor_genero'
