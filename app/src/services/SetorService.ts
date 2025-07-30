@@ -1,7 +1,6 @@
 import HTTPMethod from "http-method-enum";
 import { BaseService } from "./BaseService";
 import { Setor } from "@/types/setor";
-import { ThemeIcon } from "@mantine/core";
 import { Servico } from "@/types/servico";
 export class SetorService extends BaseService {
     constructor(token: string) {
@@ -12,12 +11,12 @@ export class SetorService extends BaseService {
     async obterTodosSetores(): Promise<Setor[]> {
         const response = await fetch(`${this.obterUrlDominio()}/`, {
             method: HTTPMethod.GET,
-            headers: this.obterHeaders()
+           
         })
 
         if (!response.ok) {
             console.log(response)
-            throw new Error(`Erro ao recuperar os setores ${JSON.stringify(response)}`);
+            throw new Error(`Erro ao recuperar os setores detalhes: status(${response.status} | ${response.statusText}) url(${response.url})`);
         }
 
         const setores: Setor[] = await response.json();
@@ -40,7 +39,7 @@ export class SetorService extends BaseService {
     }
 
     async obterServicosPorSetorId(servicoId: number): Promise<Servico[]> {
-        const response = await fetch(`http://localhost:8000/servicos-filtrados/?setor_ofertante=${servicoId}`, {
+        const response = await fetch(`${this.baseUrl}/servicos-filtrados/?setor_ofertante=${servicoId}`, {
             method: HTTPMethod.GET,
             headers: this.obterHeaders()
         })
