@@ -22,13 +22,11 @@ export default function TabelaSolicitacoes({ solicitacoes, token }: { solicitaco
                 </TableTd>
             </TableTr>
         ));
-    }else{
-        linhas = "Ainda não há solicitações cadastradas"
     }
     return (
         <div className="space-y-4 rounded-md bg-white p-6 shadow-md border border-gray-200 mt-4 w-9/12">
             <h1 className="text-xl font-semibold text-content-emphasis">Suas solicitações</h1>
-            <Table withColumnBorders withTableBorder highlightOnHover striped>
+            <Table withColumnBorders withTableBorder highlightOnHover striped captionSide="bottom">
                 <TableThead>
                     <TableTr>
                         <TableTh>ID</TableTh>
@@ -39,7 +37,7 @@ export default function TabelaSolicitacoes({ solicitacoes, token }: { solicitaco
                         <TableTh>Ação</TableTh>
                     </TableTr>
                 </TableThead>
-                <TableTbody>{linhas}</TableTbody>
+                <TableTbody>{!linhas && <TableTr><TableTd>Ainda não há solicitações cadastradas</TableTd></TableTr>}</TableTbody>
             </Table>
         </div>
     )
