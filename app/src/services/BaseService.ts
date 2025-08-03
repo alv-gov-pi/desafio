@@ -1,10 +1,10 @@
 export abstract class BaseService {
     
     protected baseUrl = 'http://localhost:8000'
-    protected token: string;
+    protected token?: string;
     protected dominio = ''
     protected urlDominio: string;
-    constructor(token: string) {
+    constructor(token?: string) {
         this.token = token;
         this.urlDominio = `${this.baseUrl}/${this.dominio}`;
     }
