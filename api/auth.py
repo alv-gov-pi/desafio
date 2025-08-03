@@ -1,7 +1,7 @@
 from rest_framework.exceptions import AuthenticationFailed, APIException
 from django.contrib.auth.hashers import check_password, make_password
 
-from api.models import Usuario
+from api.models import Usuario, Setor
 
 class Autenticacao:
     def signin(self, email, password):
@@ -18,7 +18,7 @@ class Autenticacao:
         
         return usuario
     
-    def signup(self, nome, email, password, genero):
+    def signup(self, nome, email, password, genero, setor):
         
         if not nome or nome == '':
             raise APIException('O nome não deve ser vazio!')
@@ -35,7 +35,7 @@ class Autenticacao:
             raise APIException('Email informado já está em uso!')
         
         password_hased = make_password(password)
-        
-        novo_usuario = Usuario.objects.create(nome=nome, password=password_hased, email=email, genero=genero)
+        setor_usuario = Setor.objects.filter(id=setor).first()
+        novo_usuario = Usuario.objects.create(nome=nome, password=password_hased, email=email, genero=genero, setor=setor_usuario)
 
         return novo_usuario
