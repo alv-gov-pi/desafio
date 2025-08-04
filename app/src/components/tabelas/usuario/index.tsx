@@ -1,33 +1,33 @@
 'use client'
 import { Usuario } from "@/types/usuario";
-import { useState, useEffect } from "react";
+import { Table, TableTr, TableTd, TableThead, TableTh, TableTbody, TableScrollContainer } from '@mantine/core';
+import BotaoCopiar from "@/components/buttons/copiar";
 
-export default function TabelaUsuario({usuarios }: {usuarios: Usuario[]}) {
+export default function TabelaUsuario({ usuarios }: { usuarios: Usuario[] }) {
     return (
-        <table className="border-separate border-spacing-3 border border-gray-400">
-            <caption className="caption-top">
-                    Todos os Usuários
-            </caption>
-            <thead>
-                <tr>
-                    <th className="border border-gray-300 dark:border-gray-600">Nome</th>
-                    <th className="border border-gray-300 dark:border-gray-600">E-mail</th>
-                    <th className="border border-gray-300 dark:border-gray-600">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    usuarios.map((usuario: Usuario) => (
-                        <tr >
-                            <td className="border border-gray-300 dark:border-gray-700">{usuario.nome}</td>
-                            <td className="border border-gray-300 dark:border-gray-700">{usuario.email}</td>
-                            <td className="border border-gray-300 dark:border-gray-700">
-                                <button >Editar</button><button>Apagar</button>
-                            </td>
-                        </tr>
-                    ))
-                }
-            </tbody>
-        </table>
+
+        <TableScrollContainer minWidth={400} maxHeight={300}>
+            <Table withColumnBorders withTableBorder highlightOnHover striped stickyHeader={false} verticalSpacing={'sm'}>
+                <TableThead>
+                    <TableTr>
+                        <TableTh>Membro</TableTh>
+                        <TableTh>email</TableTh>
+                    </TableTr>
+                </TableThead>
+                <TableTbody>
+                    {
+                        usuarios.map((usuario, key) => (
+
+                            <TableTr key={`${key}`}>
+                                <TableTd>{`${usuario.nome}`}</TableTd>
+                                <TableTd className="flex">{`${usuario.email}`}
+                                    <BotaoCopiar informacao={usuario.email}></BotaoCopiar>
+                                </TableTd>
+                            </TableTr>
+                        ))
+                    }
+                </TableTbody>
+            </Table>
+        </TableScrollContainer >
     )
 }
