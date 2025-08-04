@@ -8,6 +8,7 @@ import { AtendimentoTotais } from "@/types/atendimentos-totais";
 import { AvaliacaoAtendimentoPorSetor } from "@/types/avaliacao-atendimento-por-setor";
 import { AvaliacaoAtendimentoPorServico } from "@/types/avaliacao-atendimento-por-servico";
 import HTTPMethod from "http-method-enum";
+import { ErroRequest } from "@/erro/ErroRequest";
 
 export class AtendimentoService extends BaseService {
 
@@ -58,7 +59,7 @@ export class AtendimentoService extends BaseService {
         })
 
         if (!response.ok) {
-            throw new Error(`Erro ao cadastrar novo atendimento ${response}`);
+            throw new ErroRequest(response);
         }
 
         const novoAtendimento: Atendimento = await response.json();
