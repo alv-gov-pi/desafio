@@ -5,6 +5,7 @@ import { SetorService } from "@/services/SetorService";
 import { UsuarioService } from "@/services/UsuarioService";
 import { Setor } from "@/types/setor";
 import { Usuario } from "@/types/usuario";
+import mostrarNotificacao from "@/utils/notification";
 import { SyntheticEvent, useState } from "react";
 
 function FormEditarUsuario({ usuario, token, setores }: { usuario: Usuario, token: string, setores: Setor[] }) {
@@ -13,7 +14,13 @@ function FormEditarUsuario({ usuario, token, setores }: { usuario: Usuario, toke
   const [usuarioEdidado, setUsuarioEditado ] = useState(usuario);
   async function atualizar(event: SyntheticEvent) {
     event.preventDefault();
-    usuarioService.atualizarUsuario(usuarioEdidado);
+    const response = await usuarioService.atualizarUsuario(usuarioEdidado);
+    if(!!response){
+      mostrarNotificacao('Dados atualizados com sucesso', '👏 Obrigado por nos manter atualizados!!!')
+    }else {
+      mostrarNotificacao('Erro ao atualizar os dados', '🫤 Forneça dados válidos !!!')
+    }
+
   }
 
   return (
