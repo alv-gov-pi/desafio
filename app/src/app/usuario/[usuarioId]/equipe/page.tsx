@@ -8,14 +8,17 @@ import { getServerSession } from "next-auth";
 export default async function listarUsuario() {
     const session = await getServerSession(authOptions)
     const token: string = session?.user.access;
+    const setor: number = session?.user.setor;
     const usuarioService: UsuarioService = new UsuarioService(token);
-    const usuarios: Usuario[] = await usuarioService.obterUsuarios();
+    const usuarios: Usuario[] = await usuarioService.obterUsuariosPorSetor(setor);
 
-    return(
+    return (
         <TemplateApp>
-            <h1>Todos os Usuários</h1>
-            <TabelaUsuario usuarios={usuarios}/>
+            <div className="space-y-4 rounded-md bg-white p-6 shadow-md border border-gray-200 mt-4 w-10/12 flex flex-col">
+                <h1 className="text-xl font-semibold text-content-emphasis">Membros da equipe </h1>
+                <TabelaUsuario usuarios={usuarios} />
+            </div>
         </TemplateApp>
-       
+
     )
 }
