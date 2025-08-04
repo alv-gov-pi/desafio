@@ -81,6 +81,7 @@ class Atendimento(models.Model):
     cadastrado_em = models.DateTimeField(auto_now_add=True)
     resolvido_em = models.DateTimeField( null=True)
     atendido = models.BooleanField(default=False)
+    avaliado = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.id}"
     
