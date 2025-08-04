@@ -21,6 +21,7 @@ urlpatterns = [
     path('usuario/', views.ListaUsuario.as_view()),
     path('usuario/<int:pk>/', views.DetalhaUsuario.as_view()),
     path('usuario/por-email/<str:email>/', views.ObterUsuarioPorEmail.as_view(), name='obter-usuario-por-email'),
+    path('usuario/por-setor/<int:setor>/', views.ObterUsuarioPorSetor.as_view(), name='obter-usuarios-por-setor'),
     path('atendimento/', views.ListaAtendimento.as_view()),
     path('atendimento/<int:pk>/', views.DetalhaAtendimento.as_view()),
     path('atendimento/estatisticas/totais/', views.EstatisticasTotaisAtendimentos.as_view()),
