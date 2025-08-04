@@ -11,7 +11,7 @@ export class UsuarioService extends BaseService {
     async atualizarUsuario(usuario: Usuario): Promise<Usuario> {
         console.log(`atualizarUsuario: ${JSON.stringify(usuario)}`)
         const response = await fetch(`${this.obterUrlDominio()}/${usuario.id}/`, {
-            method: HTTPMethod.POST,
+            method: HTTPMethod.PUT,
             headers: this.obterHeaders(),
             body: JSON.stringify(usuario)
         })
@@ -32,6 +32,20 @@ export class UsuarioService extends BaseService {
 
         if (!response.ok) {
             throw new Error(`Erro ao recuperar os usuarios ${response.text}`);
+        }
+
+        const usuarios: Usuario[] = await response.json();
+        return usuarios;
+    }
+
+    async obterUsuariosPorSetor(setorId: number): Promise<Usuario[]> {
+        const response = await fetch(`${this.obterUrlDominio()}/por-setor/${setorId}/`, {
+            method: HTTPMethod.GET, 
+            headers: this.obterHeaders()
+        })
+
+        if (!response.ok) {
+            throw new Error(`Erro ao recuperar os membros do setor ${response.text}`);
         }
 
         const usuarios: Usuario[] = await response.json();
