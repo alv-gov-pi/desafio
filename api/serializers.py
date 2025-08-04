@@ -106,7 +106,8 @@ class AtendimentoSerializer(serializers.ModelSerializer):
                   'servico', 'servico_detalhado',
                   'solicitante', 'solicitante_detalhado',
                   'cadastrado_em', 
-                  'atendido', 
+                  'atendido',
+                  'avaliado',
                   'responsavel', 'responsavel_detalhado',
                   'observacao', 
                   'solucao', 
@@ -127,6 +128,7 @@ class AtendimentoSerializer(serializers.ModelSerializer):
         instance.solicitante = validated_data.get('solicitante', instance.solicitante)
         instance.cadastrado_em = validated_data.get('cadastrado_em', instance.cadastrado_em)
         instance.atendido = validated_data.get('atendido', instance.atendido)
+        instance.avaliado = validated_data.get('avaliado', instance.avaliado)
         instance.responsavel = validated_data.get('responsavel', instance.responsavel)
         instance.observacao = validated_data.get('observacao', instance.observacao)
         instance.solucao = validated_data.get('solucao', instance.solucao)
