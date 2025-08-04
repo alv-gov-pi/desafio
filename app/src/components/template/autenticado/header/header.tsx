@@ -1,6 +1,6 @@
 'use client'
 import { NavLink } from '@mantine/core';
-import { IconUser ,IconHome2, IconTicket, IconLogout2, IconChartBar, IconFileBarcode } from '@tabler/icons-react';
+import { IconUser ,IconHome2, IconTicket, IconLogout2, IconChartBar, IconFileBarcode,IconUsersGroup } from '@tabler/icons-react';
 import { signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 
@@ -38,6 +38,11 @@ export default function HeaderApp({ usuario_id }: { usuario_id?: string }) {
                         href={`/usuario/`}
                         label="Home"
                         leftSection={<IconHome2 size={16} stroke={1.5} />}
+                    /></i>
+                    <i><NavLink
+                        href={`/usuario/${usuario_id}/equipe`}
+                        label="Equipe"
+                        leftSection={<IconUsersGroup size={16} stroke={1.5} />}
                     /></i>
                     <i><NavLink
                         href={`/usuario/${usuario_id}`}
