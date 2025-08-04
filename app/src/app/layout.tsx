@@ -3,7 +3,7 @@ import "./globals.css";
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 import NextAuthSessionProvider from "@/providers/session-provider";
 import { ModalsProvider } from '@mantine/modals';
-
+import { Notifications } from '@mantine/notifications';
 export const metadata: Metadata = {
   title: "Atendimentos seplan",
   description: "Desafio",
@@ -23,6 +23,7 @@ export default function RootLayout({
 
         <NextAuthSessionProvider>
           <MantineProvider withGlobalStyles withNormalizeCSS>
+            <Notifications />
             <ModalsProvider>
               {children}
             </ModalsProvider>
