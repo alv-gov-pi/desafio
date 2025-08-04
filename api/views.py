@@ -43,7 +43,7 @@ class DetalhaSetor(generics.RetrieveUpdateDestroyAPIView):
 class ListaServico(generics.ListCreateAPIView):
     queryset = Servico.objects.all()
     serializer_class = ServicoSerializer
-# Nova classe para listar e filtrar serviços
+
 class ListaServicosFiltrados(generics.ListAPIView):
     queryset = Servico.objects.all()
     serializer_class = ServicoSerializer
@@ -70,6 +70,14 @@ class ObterUsuarioPorEmail(generics.RetrieveAPIView):
 
     def get_queryset(self):
         return Usuario.objects.all()
+    
+class ObterUsuarioPorSetor(generics.ListAPIView):
+    serializer_class = UsuarioSerializer
+    lookup_field = 'setor'
+
+    def get_queryset(self):
+        setor = self.kwargs.get(self.lookup_field)
+        return Usuario.objects.filter(setor=setor)
         
 class DetalhaUsuario(generics.RetrieveUpdateDestroyAPIView):
     queryset = Usuario.objects.all()
@@ -105,7 +113,14 @@ class ListaAtendimentosPorSetor(generics.ListAPIView):
         except ValueError:
             raise ValidationError({'ids': 'Os IDs devem ser uma lista de números separados por vírgula.'})
         return Atendimento.objects.filter(servico__in=ids)
+    
+class ObterAvaliacaoAtenfimento(generics.RetrieveAPIView):
+    serializer_class = UsuarioSerializer
+    lookup_field = 'setor'
 
+    def get_queryset(self):
+        return AvaliacaoAtendimento.objects.all()
+    
 class ListaAtendimento(generics.ListCreateAPIView):
     queryset = Atendimento.objects.all()
     serializer_class = AtendimentoSerializer
