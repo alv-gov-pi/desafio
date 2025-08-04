@@ -18,8 +18,10 @@ export default function TabelaSolicitacoes({ solicitacoes, token }: { solicitaco
                 <TableTd>
                     {!atendimento.atendido &&
                         <AcoesAtendimento atendimento={atendimento} token={token} />}
-                    {atendimento.atendido &&
+                    {atendimento.atendido && !atendimento.avaliado &&
                         <FormAvaliacaoAtendimento atendimento={atendimento} token={token} />}
+                    {atendimento.atendido && atendimento.avaliado &&
+                       'Obrigado pela avaliação'}
                 </TableTd>
             </TableTr>
         ));
