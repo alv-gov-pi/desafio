@@ -6,7 +6,8 @@ import { FormAvaliacaoAtendimento } from '@/components/forms/atendimento/form-av
 
 export default function TabelaSolicitacoes({ solicitacoes, token }: { solicitacoes: Atendimento[], token: string }) {
     let linhas;
-    if (!solicitacoes) {
+    if (!!solicitacoes) {
+        console.log("Gerou linhas")
         linhas = solicitacoes.map((atendimento) => (
             <TableTr key={`${atendimento.id}`}>
                 <TableTd>{`${atendimento.id}`}</TableTd>
@@ -37,7 +38,7 @@ export default function TabelaSolicitacoes({ solicitacoes, token }: { solicitaco
                         <TableTh>Ação</TableTh>
                     </TableTr>
                 </TableThead>
-                <TableTbody>{!linhas && <TableTr><TableTd>Ainda não há solicitações cadastradas</TableTd></TableTr>}</TableTbody>
+                <TableTbody>{linhas}</TableTbody>
             </Table>
         </div>
     )
