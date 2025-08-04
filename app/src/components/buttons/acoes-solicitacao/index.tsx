@@ -6,8 +6,8 @@ import { Atendimento } from "@/types/atendimento";
 export default function AcoesAtendimento({atendimento, token}:{atendimento: Atendimento, token: string}) {
     return (
         <Group justify="center">
-            <BotaoExcluirSolicitacao id={atendimento.id} token={token}/>
-            <BotaoEditarSolicitacao solicitacaoId={atendimento.id} solicitanteId={atendimento.solicitante_detalhado.id} />
+            <BotaoExcluirSolicitacao id={atendimento.id} token={token} solicitanteId={atendimento.solicitante}/>
+            <BotaoEditarSolicitacao solicitacaoId={atendimento.id} solicitanteId={atendimento.solicitante} />
         </Group>
     )
 }

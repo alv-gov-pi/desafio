@@ -5,12 +5,13 @@ import { Group, Button, Box, Text } from '@mantine/core';
 import { AtendimentoService } from '@/services/AtendimentoService';
 import { Atendimento } from '@/types/atendimento';
 import { AvaliacaoAtendimento } from '@/types/avaliacao-atendimento';
+import { useRouter } from 'next/navigation';
 
 export function FormAvaliacaoAtendimento({atendimento, token} : {atendimento : Atendimento, token: string}) {
     const atendimentoService = new AtendimentoService(token);
     const [atendimentoAvaliado, setAtendimentoAvaliado] = useState(atendimento);
     const [avaliacao, setAvaliacao] = useState(0);
-
+    const router = useRouter();
     const enviarAvaliacao = (value: any) => {
         setAvaliacao(value);
         const novaAvaliacao: AvaliacaoAtendimento = {
@@ -21,6 +22,9 @@ export function FormAvaliacaoAtendimento({atendimento, token} : {atendimento : A
             'setor_solicitante': atendimentoAvaliado.solicitante_detalhado.setor
         }
         atendimentoService.adicionarAvaliacaoAtendimento(novaAvaliacao, atendimento.id);
+        setAtendimentoAvaliado({...atendimentoAvaliado, 'atendido': true})
+        atendimentoService.atualizaAvaliacao(atendimento);
+        router.refresh()
     };
 
     const emojis = ['😠', '🙁', '😐', '🙂', '😀'];
@@ -42,6 +46,7 @@ export function FormAvaliacaoAtendimento({atendimento, token} : {atendimento : A
                             radius="xl"
                             onClick={() => enviarAvaliacao(value)}
                             style={{ minWidth: 60 }}
+                            disabled={!!avaliacao}
                         >
                             {emoji}
                         </Button>

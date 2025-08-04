@@ -92,7 +92,7 @@ export class AtendimentoService extends BaseService {
             headers: this.obterHeaders(),
             body: JSON.stringify(avaliacaoAtendimento)
         });
-
+        //let atendimento: Atendimento = await this.obterAtendimentoPorId(`${idAtendimento}`);
         if (!response.ok) {
             throw new Error(`Erro ao enviar avaliacao de atendimento ${response}`);
         }
@@ -143,13 +143,33 @@ export class AtendimentoService extends BaseService {
         });
 
         if (!response.ok) {
-            throw new Error('Erro ao enviar os dados');
+            throw new Error('Erro ao Atualizar o responsável !!!');
         }
 
         const data = await response.json();
         return data;
     }
 
+    async atualizaAvaliacao(atendimento: Atendimento): Promise<Atendimento> {
+        const response = await fetch(`${this.obterUrlDominio()}/${atendimento.id}/`, {
+            method: HTTPMethod.PUT,
+            headers: this.obterHeaders(),
+            body: JSON.stringify({
+                "id": atendimento.id,
+                "responsavel": atendimento.responsavel,
+                "servico": atendimento.servico,
+                "solicitante": atendimento.solicitante,
+                "avaliado": true
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao Atualizar o responsável !!!');
+        }
+
+        const data = await response.json();
+        return data;
+    }
     async obterEstatisticasAtentimentoPorData(): Promise<AtendimentoPorData[]> {
 
         const response = await fetch(`${this.obterUrlDominio()}/estatisticas/por-data/`, {
@@ -238,6 +258,21 @@ export class AtendimentoService extends BaseService {
 
         const quantidadeAtendimentoPorResponsavel: QuantidadeAtendimentoPorResponsavel[] = await response.json();
         return quantidadeAtendimentoPorResponsavel;
+    }
+
+    async obterAvaliacaoAtendimeto(atendimentoId: number): Promise<AvaliacaoAtendimento> {
+        const response = await fetch(`${this.obterUrlDominio()}/${atendimentoId}/avaliacao/`, {
+            method: HTTPMethod.GET,
+            headers: this.obterHeaders()
+        });
+
+        if (!response.ok) {
+            console.log("response ", response.statusText, response.url, response.status, response.headers, response.body, response.type, response.bodyUsed)
+            throw new Error(`Erro ao solicitar a avaliação do atendimento ${response}`);
+        }
+
+        const avaliacaoAtendimento: AvaliacaoAtendimento = await response.json();
+        return avaliacaoAtendimento;
     }
 
 }
