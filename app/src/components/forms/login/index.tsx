@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { SyntheticEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import mostrarNotificacao from "@/utils/notification";
 
 function FormLogin() {
     const [email, setEmail] = useState<string>('')
@@ -20,7 +21,7 @@ function FormLogin() {
         })
 
         if (result?.error) {
-            console.log("FORM LOGIN:",result)
+            mostrarNotificacao('😖 Usuário não encontrado!', 'Verifique suas credenciais e tente novamente!', 'red')
             return
         }
 
