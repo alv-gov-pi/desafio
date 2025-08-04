@@ -1,7 +1,6 @@
 import TemplateApp from "@/components/template/autenticado/template";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
 import React from "react";
 import TabelaSolicitacoes from "@/components/tabelas/usuario/solicitacoes/TabelaSolicitacoes";
 import { AtendimentoService } from "@/services/AtendimentoService";
