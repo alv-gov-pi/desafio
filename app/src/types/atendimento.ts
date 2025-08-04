@@ -10,6 +10,7 @@ export type Atendimento = {
     responsavel?: number,
     responsavel_detalhado?: Usuario,
     atendido?: boolean,
+    avaliado?: boolean,
     cadastrado_em?: Date,
     observacao?: string,
     solucao?: string,
