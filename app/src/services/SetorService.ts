@@ -38,8 +38,8 @@ export class SetorService extends BaseService {
         return setor;
     }
 
-    async obterServicosPorSetorId(servicoId: number): Promise<Servico[]> {
-        const response = await fetch(`${this.baseUrl}/servicos-filtrados/?setor_ofertante=${servicoId}`, {
+    async obterServicosPorSetorId(setorId: number): Promise<Servico[]> {
+        const response = await fetch(`${this.baseUrl}/servicos-filtrados/?setor_ofertante=${setorId}`, {
             method: HTTPMethod.GET,
             headers: this.obterHeaders()
         })
