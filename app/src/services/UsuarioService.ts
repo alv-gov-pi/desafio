@@ -38,6 +38,20 @@ export class UsuarioService extends BaseService {
         return usuarios;
     }
 
+    async alterarStatus(usuarioId: number, novoStatus: boolean){
+        const response = await fetch(`${this.obterUrlDominio()}/${usuarioId}/`, {
+            method: HTTPMethod.PATCH,
+            headers: this.obterHeaders(),
+            body: JSON.stringify({ esta_ativo: novoStatus }),
+        })
+
+        if (!response.ok) {
+            throw new Error(`Erro ao atualizar o status do usuario, detalhes: ${response.text()}`);
+        }
+
+        const usuarioAtualizado: Usuario = await response.json();
+        return usuarioAtualizado;
+    }
     async obterUsuariosPorSetor(setorId: number): Promise<Usuario[]> {
         const response = await fetch(`${this.obterUrlDominio()}/por-setor/${setorId}/`, {
             method: HTTPMethod.GET, 
