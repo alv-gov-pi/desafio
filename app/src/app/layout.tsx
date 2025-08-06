@@ -4,6 +4,8 @@ import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/c
 import NextAuthSessionProvider from "@/providers/session-provider";
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
+import { NuqsAdapter } from 'nuqs/adapters/next'
+
 export const metadata: Metadata = {
   title: "Atendimentos seplan",
   description: "Desafio",
@@ -25,7 +27,7 @@ export default function RootLayout({
           <MantineProvider withGlobalStyles withNormalizeCSS>
             <Notifications />
             <ModalsProvider>
-              {children}
+             <NuqsAdapter>{children}</NuqsAdapter>
             </ModalsProvider>
           </MantineProvider>
         </NextAuthSessionProvider>
