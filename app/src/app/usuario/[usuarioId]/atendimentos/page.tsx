@@ -5,16 +5,19 @@ import { Atendimento } from "@/types/atendimento";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { AtendimentoService } from '@/services/AtendimentoService';
+import { SetorService } from "@/services/SetorService";
+import { Servico } from "@/types/servico";
 
 export default async function Atendimentos() {
     const session = await getServerSession(authOptions)
-    const servicos = [9];
     const token: string = session?.user.access;
     if(!session?.user.id) {
         throw Error("Erro ao recuperar sessão !!!")
     }
     const idUsuarioLogado: number = Number(session?.user.id);
-    const servicosString = servicos.toString()
+    const setorService: SetorService = new SetorService(token);
+    const servicos: Servico[] = await setorService.obterServicosPorSetorId(session.user.setor);
+    const servicosString = servicos.map(servico => servico.id).toString();
     const atendimentoService = new AtendimentoService(token);
    
     const response =  await atendimentoService.obterAtentimentoPorServicos(servicosString);
