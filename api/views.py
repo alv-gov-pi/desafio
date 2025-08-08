@@ -23,6 +23,7 @@ from api.models import (
     InteracaoAtencimento, 
     VwEstatatisticasSetorGenero
 )
+from api.filters import UsuarioFilter
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
@@ -63,6 +64,8 @@ class DetalhaServico(generics.RetrieveUpdateDestroyAPIView):
 class ListaUsuario(generics.ListCreateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = UsuarioFilter
 
 class ObterUsuarioPorEmail(generics.RetrieveAPIView):
     serializer_class = UsuarioSerializer
