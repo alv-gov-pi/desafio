@@ -24,10 +24,11 @@ export class UsuarioService extends BaseService {
         return usuarioAtualizado;
     }
 
-    async obterUsuarios(): Promise<Usuario[]> {
+    async obterUsuarios(filtros?: any): Promise<Usuario[]> {
         const response = await fetch(`${this.obterUrlDominio()}`, {
             method: HTTPMethod.GET, 
-            headers: this.obterHeaders()
+            headers: this.obterHeaders(),
+            body: JSON.stringify(filtros)
         })
 
         if (!response.ok) {
