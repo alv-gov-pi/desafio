@@ -2,12 +2,33 @@
 import django_filters
 from .models import Usuario
 
+from django_filters import rest_framework as filters
+
+class GeneroFilter(filters.MultipleChoiceFilter):
+    def filter(self, qs, value):
+        if not value:
+            # Se nenhum valor for passado, retorna todos os objetos (sem filtrar por gênero)
+            return qs
+        # Filtra normalmente se valores válidos forem passados
+        return super().filter(qs, value)
+
+class StatusFilter(filters.BooleanFilter):
+    def filter(self, qs, value):
+        if not value:
+            # Se nenhum valor for passado, retorna todos os objetos (sem filtrar por status)
+            return qs
+        # Filtra normalmente se valores válidos forem passados
+        return super().filter(qs, value)
+
 class UsuarioFilter(django_filters.FilterSet):
     # Filtro por nome (busca parcial, insensível a maiúsculas)
     nome = django_filters.CharFilter(field_name='nome', lookup_expr='icontains')
 
     # Filtro por gênero (exatidão)
-    genero = django_filters.MultipleChoiceFilter(choices=Usuario.genero.field.choices)
+    genero = GeneroFilter(choices=Usuario.genero.field.choices)
+
+    #Filtro por status 
+    status = StatusFilter(field_name='esta_ativo')
     
     # Filtro por setor (pelo ID do setor)
     setor = django_filters.NumberFilter(field_name='setor__id')
@@ -18,4 +39,4 @@ class UsuarioFilter(django_filters.FilterSet):
 
     class Meta:
         model = Usuario
-        fields = ['nome', 'genero', 'setor', 'cadastrado_em__gte', 'cadastrado_em__lte']
+        fields = ['nome', 'genero', 'esta_ativo','setor', 'cadastrado_em__gte', 'cadastrado_em__lte']

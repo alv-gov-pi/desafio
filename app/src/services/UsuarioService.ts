@@ -1,6 +1,7 @@
 import { Usuario } from "@/types/usuario";
 import { BaseService } from "./BaseService";
 import HTTPMethod from "http-method-enum";
+import { Console } from "console";
 
 export class UsuarioService extends BaseService {
     constructor(token: string) {
@@ -25,10 +26,11 @@ export class UsuarioService extends BaseService {
     }
 
     async obterUsuarios(filtros?: any): Promise<Usuario[]> {
-        const response = await fetch(`${this.obterUrlDominio()}`, {
+        console.log(JSON.stringify(filtros));
+        const searchParams = new URLSearchParams(filtros);
+        const response = await fetch(`${this.obterUrlDominio()}?${searchParams.toString()}`, {
             method: HTTPMethod.GET, 
             headers: this.obterHeaders(),
-            body: JSON.stringify(filtros)
         })
 
         if (!response.ok) {
